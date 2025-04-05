@@ -57,7 +57,12 @@ fi
 if [ -f "$HOME/.local/share/konsole" ]; then
     mv "$HOME/.local/share/konsole" "$HOME/.local/share/konsole.bak"
 fi
-
+if [ -d "$HOME/.config/kwinrc" ]; then
+    mv "$HOME/.config/kwinrc" "$HOME/.config/kwinrc.bak"
+fi
+if [ -d "$HOME/.config/kglobalshortcutsrc" ]; then
+    mv "$HOME/.config/kglobalshortcutsrc" "$HOME/.config/kglobalshortcutsrc.bak"
+fi
 
 
 echo "Creating symlinks for dotfiles..."
@@ -66,5 +71,7 @@ ln -sf "$DOTFILES_DIR/.zshrc" "$HOME/.zshrc"
 ln -sf "$DOTFILES_DIR/.config/starship.toml" "$HOME/.config/starship.toml"
 ln -sf "$DOTFILES_DIR/fonts" "$HOME/.local/share/fonts"
 ln -sf "$DOTFILES_DIR/konsole" "$HOME/.local/share/konsole"
+ln -sf "$DOTFILES_DIR/kwinrc" "$HOME/.config/kwinrc"
+ln -sf "$DOTFILES_DIR/kglobalshortcutsrc" "$HOME/.config/kglobalshortcutsrc"
 
 echo "Dotfiles setup complete!"
