@@ -1,5 +1,2 @@
 # Default Starship configuration
 
-# Prompt character
-[character]
-symbol = "❯"

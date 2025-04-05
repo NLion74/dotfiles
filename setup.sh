@@ -51,6 +51,12 @@ fi
 if [ -f "$HOME/.config/starship.toml" ]; then
     mv "$HOME/.config/starship.toml" "$HOME/.config/starship.toml.bak"
 fi
+if [ -f "$HOME/.local/share/fonts" ]; then
+    mv "$HOME/.local/share/fonts" "$HOME/.local/share/fonts.bak"
+fi
+if [ -f "$HOME/.local/share/konsole" ]; then
+    mv "$HOME/.local/share/konsole" "$HOME/.local/share/konsole.bak"
+fi
 
 
 
@@ -58,5 +64,7 @@ echo "Creating symlinks for dotfiles..."
 
 ln -sf "$DOTFILES_DIR/.zshrc" "$HOME/.zshrc"
 ln -sf "$DOTFILES_DIR/.config/starship.toml" "$HOME/.config/starship.toml"
+ln -sf "$DOTFILES_DIR/fonts" "$HOME/.local/share/fonts"
+ln -sf "$DOTFILES_DIR/konsole" "$HOME/.local/share/konsole"
 
 echo "Dotfiles setup complete!"
