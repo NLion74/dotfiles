@@ -1,11 +1,11 @@
 #!/bin/bash
 
-DOTFILES_DIR="$HOME/.dotfiles"
+DOTFILES_DIR="$(pwd)"
 
 command_exists() {
     command -v "$1" &> /dev/null
 }
-
+ 
 echo "Installing Required programs..."
 
 if command_exists git; then
@@ -48,9 +48,15 @@ echo "Backing up existing dotfiles..."
 if [ -f "$HOME/.zshrc" ]; then
     mv "$HOME/.zshrc" "$HOME/.zshrc.bak"
 fi
+if [ -f "$HOME/.config/starship.toml" ]; then
+    mv "$HOME/.config/starship.toml" "$HOME/.config/starship.toml.bak"
+fi
+
+
 
 echo "Creating symlinks for dotfiles..."
 
-ln -sf "$DOTFILES_DIR/zshrc" "$HOME/.zshrc"
+ln -sf "$DOTFILES_DIR/.zshrc" "$HOME/.zshrc"
+ln -sf "$DOTFILES_DIR/.config/starship.toml" "$HOME/.config/starship.toml"
 
 echo "Dotfiles setup complete!"
