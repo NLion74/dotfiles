@@ -15,6 +15,7 @@ zinit light zsh-users/zsh-completions
 
 # Aliases
 alias la='ls -a'
+alias archupdate="~/scripts/arch-update.sh"
 
 # History config
 HISTFILE=~/.zsh_history
