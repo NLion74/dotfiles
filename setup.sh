@@ -63,15 +63,27 @@ fi
 if [ -d "$HOME/.config/kglobalshortcutsrc" ]; then
     mv "$HOME/.config/kglobalshortcutsrc" "$HOME/.config/kglobalshortcutsrc.bak"
 fi
-
+if [ -d "$HOME/.config/kdeglobals" ]; then
+    mv "$HOME/.config/kdeglobals" "$HOME/.config/kdeglobals.bak"
+fi
+if [ -d "$HOME/.config/kscreenlockerrc" ]; then
+    mv "$HOME/.config/kscreenlockerrc" "$HOME/.config/kscreenlockerrc.bak"
+fi
+if [ -d "$HOME/.config/plasmarc" ]; then
+    mv "$HOME/.config/plasmarc" "$HOME/.config/plasmarc.bak"
+fi
 
 echo "Creating symlinks for dotfiles..."
 
 ln -sf "$DOTFILES_DIR/.zshrc" "$HOME/.zshrc"
+ln -sf "$DOTFILES_DIR/scripts" "$HOME/scripts"
 ln -sf "$DOTFILES_DIR/.config/starship.toml" "$HOME/.config/starship.toml"
-ln -sf "$DOTFILES_DIR/fonts" "$HOME/.local/share/fonts"
-ln -sf "$DOTFILES_DIR/konsole" "$HOME/.local/share/konsole"
-ln -sf "$DOTFILES_DIR/kwinrc" "$HOME/.config/kwinrc"
-ln -sf "$DOTFILES_DIR/kglobalshortcutsrc" "$HOME/.config/kglobalshortcutsrc"
+ln -sf "$DOTFILES_DIR/.fonts" "$HOME/.fonts"
+ln -sf "$DOTFILES_DIR/.local/share/konsole" "$HOME/.local/share/konsole"
+ln -sf "$DOTFILES_DIR/.config/kwinrc" "$HOME/.config/kwinrc"
+ln -sf "$DOTFILES_DIR/.config/kglobalshortcutsrc" "$HOME/.config/kglobalshortcutsrc"
+ln -sf "$DOTFILES_DIR/.config/kdeglobals" "$HOME/.config/kdeglobals"
+ln -sf "$DOTFILES_DIR/.config/kdescreenlockerrc" "$HOME/.config/kdescreenlockerrc"
+ln -sf "$DOTFILES_DIR/.config/plasmarc" "$HOME/.config/plasmarc"
 
 echo "Dotfiles setup complete!"

@@ -1,8 +1,8 @@
-# #!/bin/bash
-
+#!/bin/bash
 set -e
 
 AUR_HELPER="paru"
+USER_NAME="nlion"
 
 RED='\e[31m'
 GREEN='\e[32m'
@@ -11,11 +11,13 @@ BLUE='\e[34m'
 CYAN='\e[36m'
 RESET='\e[0m'
 
-if [[ $EUID -ne 0 ]]; then
-    echo -e "${RED}Please run this script as root (sudo).${RESET}"
-    exit 1
-fi
+echo -e "${RED}Root required for execution.${RESET}"
 
+# Ask for sudo access at the beginning
+sudo -v
+
+# Root operations grouped together
+sudo bash <<'EOF'
 echo -e "${CYAN}Refreshing package database...${RESET}"
 pacman -Sy
 
@@ -40,25 +42,16 @@ else
     pacman -S --noconfirm pacman-contrib
     paccache -r
 fi
+EOF
 
-# echo -e "${CYAN}Checking for orphaned packages...${RESET}"
-# orphans=$(pacman -Qdtq)
-# if [[ -n "$orphans" ]]; then
-#     echo -e "${RED}Removing orphaned packages:${RESET} $orphans"
-#     pacman -Rns --noconfirm $orphans
-# else
-#     echo -e "${GREEN}No orphaned packages found.${RESET}"
-# fi
-
+# Back to user mode for AUR updates
 if command -v $AUR_HELPER &> /dev/null; then
     echo -e "${CYAN}Updating AUR packages with $AUR_HELPER...${RESET}"
-    sudo -u $(logname) $AUR_HELPER -Syu --noconfirm
+    $AUR_HELPER -Syu --noconfirm
 else
     echo -e "${YELLOW}AUR helper ($AUR_HELPER) not found. Skipping AUR updates.${RESET}"
 fi
 
 echo -e "${GREEN}System update completed.${RESET}"
 echo -e "${BLUE}Check logs:${RESET} cat /var/log/pacman.log | tail -n 20"
-echo -e "${RED}Reboot if necessary.${RESET}"
-
-exit 0
+echo -e "${BLUE}Reboot if necessary.${RESET}"

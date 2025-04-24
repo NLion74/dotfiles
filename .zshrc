@@ -39,6 +39,13 @@ bindkey "^[[H" beginning-of-line  # for xterm, iTerm, and similar terminals
 bindkey "^[[1~" beginning-of-line # for some other terminals
 # Make the Del key delete characters after the cursor (forward delete)
 bindkey "^[[3~" delete-char
+# Make End key go to the end of the line
+bindkey '\eOF' end-of-line
+bindkey '\e[F' end-of-line
 
 # Starlight Prompt
 eval "$(starship init zsh)"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
