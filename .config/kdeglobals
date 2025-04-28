@@ -133,24 +133,25 @@ ForegroundPositive=0,110,40
 ForegroundVisited=224,64,251
 
 [DirSelect Dialog]
-DirSelectDialog Size=960,540
+DirSelectDialog Size=820,568
 History Items[$e]=file:$HOME/Games/Heroic/Celeste/Saves,file:///mnt/Media/Anime/86 Eighty Six/Season 1,file:$HOME
 Splitter State=\x00\x00\x00\xff\x00\x00\x00\x01\x00\x00\x00\x02\x00\x00\x00\x8c\x00\x00\x02\xa8\x00\xff\xff\xff\xff\x01\x00\x00\x00\x01\x00
 
 [General]
 AccentColor=146,110,228
 BrowserApplication=google-chrome.desktop
-ColorSchemeHash=43c05a93da8f1967d2659e3c00d09a3a4787cafd
+ColorSchemeHash=625c32ae46f33771aca7694ab0deae5a44bbf41c
 LastUsedCustomAccentColor=146,110,228
 UseSystemBell=true
 
 [KDE]
 LookAndFeelPackage=com.github.vinceliuice.Layan
+widgetStyle=Breeze
 
 [KFileDialog Settings]
 Allow Expansion=false
 Automatically select filename extension=true
-Breadcrumb Navigation=true
+Breadcrumb Navigation=false
 Decoration position=2
 LocationCombo Completionmode=5
 PathCombo Completionmode=5
@@ -163,7 +164,7 @@ Show hidden files=false
 Sort by=Name
 Sort directories first=true
 Sort hidden files last=false
-Sort reversed=true
+Sort reversed=false
 Speedbar Width=140
 View Style=DetailTree
 

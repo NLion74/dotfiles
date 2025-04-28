@@ -54,9 +54,6 @@ fi
 if [ -f "$HOME/.local/share/fonts" ]; then
     mv "$HOME/.local/share/fonts" "$HOME/.local/share/fonts.bak"
 fi
-if [ -f "$HOME/.local/share/konsole" ]; then
-    mv "$HOME/.local/share/konsole" "$HOME/.local/share/konsole.bak"
-fi
 if [ -d "$HOME/.config/kwinrc" ]; then
     mv "$HOME/.config/kwinrc" "$HOME/.config/kwinrc.bak"
 fi
@@ -72,6 +69,12 @@ fi
 if [ -d "$HOME/.config/plasmarc" ]; then
     mv "$HOME/.config/plasmarc" "$HOME/.config/plasmarc.bak"
 fi
+if [ -d "$HOME/.config/alacritty" ]; then
+    mv "$HOME/.config/alacritty" "$HOME/.config/alacritty.bak"
+fi
+if [ -d "$HOME/.config/neofetch" ]; then
+    mv "$HOME/.config/neofetch" "$HOME/.config/neofetch.bak"
+fi
 
 echo "Creating symlinks for dotfiles..."
 
@@ -79,7 +82,8 @@ ln -sf "$DOTFILES_DIR/.zshrc" "$HOME/.zshrc"
 ln -sf "$DOTFILES_DIR/scripts" "$HOME/scripts"
 ln -sf "$DOTFILES_DIR/.config/starship.toml" "$HOME/.config/starship.toml"
 ln -sf "$DOTFILES_DIR/.fonts" "$HOME/.fonts"
-cp -sf "$DOTFILES_DIR/.local/share/konsole" "$HOME/.local/share/konsole"
+ln -sf "$DOTFILES_DIR/.config/alacritty" "$HOME/.config/alacritty"
+ln -sf "$DOTFILES_DIR/.config/neofetch" "$HOME/.config/neofetch"
 cp -sf "$DOTFILES_DIR/.config/kwinrc" "$HOME/.config/kwinrc"
 cp -sf "$DOTFILES_DIR/.config/kglobalshortcutsrc" "$HOME/.config/kglobalshortcutsrc"
 cp -sf "$DOTFILES_DIR/.config/kdeglobals" "$HOME/.config/kdeglobals"
