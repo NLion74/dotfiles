@@ -87,7 +87,7 @@ ln -sf "$DOTFILES_DIR/.config/neofetch" "$HOME/.config/neofetch"
 cp -sf "$DOTFILES_DIR/.config/kwinrc" "$HOME/.config/kwinrc"
 cp -sf "$DOTFILES_DIR/.config/kglobalshortcutsrc" "$HOME/.config/kglobalshortcutsrc"
 cp -sf "$DOTFILES_DIR/.config/kdeglobals" "$HOME/.config/kdeglobals"
-cp -sf "$DOTFILES_DIR/.config/kdescreenlockerrc" "$HOME/.config/kdescreenlockerrc"
+cp -sf "$DOTFILES_DIR/.config/kscreenlockerrc" "$HOME/.config/kscreenlockerrc"
 cp -sf "$DOTFILES_DIR/.config/plasmarc" "$HOME/.config/plasmarc"
 
 echo "Dotfiles setup complete!"
