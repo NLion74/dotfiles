@@ -19,7 +19,7 @@ wallpaperplugin=org.kde.image
 positions={"1920x1080":[]}
 
 [Containments][1][Wallpaper][org.kde.image][General]
-Image=/home/nlion/Downloads/download.jpeg
+Image=/home/nlion/dotfiles/data/wallpaper.jpeg
 SlidePaths=/usr/share/wallpapers/
 
 [Containments][2]
