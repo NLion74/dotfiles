@@ -36,12 +36,27 @@ else
     fi
 fi
 
+if command_exists starship; then
+    echo "Starship is already installed."
+else
+    echo "Starship is not installed. Installing Starship..."
+    if command_exists apt-get; then
+        sudo apt-get update && sudo apt-get install starship -y
+    elif command_exists pacman; then
+        sudo pacman -S starship --noconfirm
+    else
+        curl -sS https://starship.rs/install.sh | sh
+    fi
+fi
+
 if [ -d "$HOME/.zsh/zinit" ]; then
     echo "Zinit is already installed."
 else
     echo "Installing Zinit..."
     git clone https://github.com/zdharma-continuum/zinit.git "$HOME/.zsh/zinit"
 fi
+
+chsh -s $(which zsh)
 
 echo "Backing up existing dotfiles..."
 
@@ -91,3 +106,5 @@ cp -sf "$DOTFILES_DIR/.config/kscreenlockerrc" "$HOME/.config/kscreenlockerrc"
 cp -sf "$DOTFILES_DIR/.config/plasmarc" "$HOME/.config/plasmarc"
 
 echo "Dotfiles setup complete!"
+echo "A reboot to is recommended for changes to take effect"
+
