@@ -12,6 +12,7 @@ Mode=Constant
 NightTemperature=5000
 
 [Plugins]
+blurEnabled=false
 shakecursorEnabled=false
 
 [Tiling]

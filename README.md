@@ -19,5 +19,6 @@ chmod +x setup.sh
     - Application Style -> Breeze
     - Window Decorations -> Willow Dark
     - Icons -> Tela
-    - Cursors -> Breeze // mononoki nerd
+    - Cursors -> Breeze
     - System Sounds -> disabled
+    - GTK Theme -> Dracula
