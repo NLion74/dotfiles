@@ -1,0 +1,2 @@
+# SMB Share
+//192.168.178.33/media /mnt/Media cifs credentials=/etc/smbcredentials/.smbcredentials,uid=1000,gid=1000,iocharset=utf8,auto,_netdev,vers=3.0 0 0
