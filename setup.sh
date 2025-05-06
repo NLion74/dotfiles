@@ -84,6 +84,12 @@ fi
 if [ -d "$HOME/.config/plasmarc" ]; then
     mv "$HOME/.config/plasmarc" "$HOME/.config/plasmarc.bak"
 fi
+if [ -f "$HOME/.config/ksmserverrc" ]; then
+    mv "$HOME/.config/ksmserverrc" "$HOME/.config/ksmserverrc.bak"
+fi
+if [ -f "$HOME/.config/plasma-org.kde.plasma.desktop-appletsrc" ]; then
+    mv "$HOME/.config/plasma-org.kde.plasma.desktop-appletsrc" "$HOME/.config/plasma-org.kde.plasma.desktop-appletsrc.bak"
+fi
 if [ -d "$HOME/.config/alacritty" ]; then
     mv "$HOME/.config/alacritty" "$HOME/.config/alacritty.bak"
 fi
@@ -104,7 +110,8 @@ cp -sf "$DOTFILES_DIR/.config/kglobalshortcutsrc" "$HOME/.config/kglobalshortcut
 cp -sf "$DOTFILES_DIR/.config/kdeglobals" "$HOME/.config/kdeglobals"
 cp -sf "$DOTFILES_DIR/.config/kscreenlockerrc" "$HOME/.config/kscreenlockerrc"
 cp -sf "$DOTFILES_DIR/.config/plasmarc" "$HOME/.config/plasmarc"
+cp -sf "$DOTFILES_DIR/.config/ksmserverrc" "$HOME/.config/ksmserverrc"
+cp -sf "$DOTFILES_DIR/.config/plasma-org.kde.plasma.desktop-appletsrc" "$HOME/.config/plasma-org.kde.plasma.desktop-appletsrc"
 
 echo "Dotfiles setup complete!"
 echo "A reboot to is recommended for changes to take effect"
-
