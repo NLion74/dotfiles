@@ -1,0 +1,12 @@
+[Unit]
+Description=Remount CIFS share after resume
+After=network-online.target
+Wants=network-online.target
+ConditionPathExists=/mnt/share
+
+[Service]
+Type=oneshot
+ExecStart=/bin/mount /mnt/Media -av
+
+[Install]
+WantedBy=sleep.target suspend.target hibernate.target

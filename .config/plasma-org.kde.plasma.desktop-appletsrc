@@ -82,7 +82,7 @@ DialogHeight=540
 DialogWidth=720
 
 [Containments][2][Applets][5][Configuration][General]
-launchers=preferred://filemanager,preferred://browser,file:///usr/share/applications/discord.desktop,applications:io.element.Element.desktop,applications:com.github.xeco23.WasIstLos.desktop,applications:spotify.desktop,applications:org.mozilla.Thunderbird.desktop,applications:joplin.desktop,applications:code.desktop
+launchers=preferred://filemanager,preferred://browser,file:///usr/share/applications/discord.desktop,applications:io.element.Element.desktop,applications:spotify.desktop,applications:com.github.xeco23.WasIstLos.desktop,applications:org.mozilla.Thunderbird.desktop,applications:joplin.desktop,applications:code.desktop
 
 [Containments][2][Applets][6]
 immutability=1
