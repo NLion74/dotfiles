@@ -21,4 +21,4 @@ chmod +x setup.sh
     - Icons -> Tela
     - Cursors -> Breeze
     - System Sounds -> disabled
-    - GTK Theme -> Dracula
+    - GTK Theme -> Tokyonight-Dark
