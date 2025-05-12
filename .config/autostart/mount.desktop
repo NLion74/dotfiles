@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Exec=/home/nlion/scripts/mount.sh
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Name=My Script
+Comment=Runs after login

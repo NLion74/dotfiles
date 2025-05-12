@@ -96,6 +96,12 @@ fi
 if [ -d "$HOME/.config/neofetch" ]; then
     mv "$HOME/.config/neofetch" "$HOME/.config/neofetch.bak"
 fi
+if [ -d "$HOME/.config/autostart/mount.desktop" ]; then
+    mv "$HOME/.config/autostart/mount.desktop" "$HOME/.config//autostart/mount.desktop.bak"
+fi
+if [ -d "$HOME/scripts" ]; then
+    mv "$HOME/scripts" "$HOME/scripts.bak"
+fi
 
 echo "Creating symlinks for dotfiles..."
 
@@ -112,6 +118,7 @@ cp -sf "$DOTFILES_DIR/.config/kscreenlockerrc" "$HOME/.config/kscreenlockerrc"
 cp -sf "$DOTFILES_DIR/.config/plasmarc" "$HOME/.config/plasmarc"
 cp -sf "$DOTFILES_DIR/.config/ksmserverrc" "$HOME/.config/ksmserverrc"
 cp -sf "$DOTFILES_DIR/.config/plasma-org.kde.plasma.desktop-appletsrc" "$HOME/.config/plasma-org.kde.plasma.desktop-appletsrc"
+ln -sf "$DOTFILES_DIR/.config/autostart/mount.desktop" "$HOME/.config/autostart/mount.desktop"
 
 echo "Dotfiles setup complete!"
 echo "A reboot to is recommended for changes to take effect"

@@ -248,4 +248,4 @@ shownItems=org.kde.plasma.weather
 
 [ScreenMapping]
 itemsOnDisabledScreens=
-screenMapping=desktop:/Epic Games Launcher.lnk,0,5fda7a21-4428-40a2-a7a1-37488a28c807,desktop:/Ubisoft Connect.lnk,0,5fda7a21-4428-40a2-a7a1-37488a28c807
+screenMapping=desktop:/Ubisoft Connect.lnk,0,5fda7a21-4428-40a2-a7a1-37488a28c807,desktop:/Epic Games Launcher.lnk,0,5fda7a21-4428-40a2-a7a1-37488a28c807
