@@ -17,7 +17,7 @@ echo -e "${RED}Root required for execution.${RESET}"
 sudo -v
 
 # Root operations grouped together
-sudo bash <<'EOF'
+sudo bash <<EOF
 echo -e "${CYAN}Refreshing package database...${RESET}"
 pacman -Sy
 
@@ -60,6 +60,14 @@ else
     echo -e "${YELLOW}Flatpak not found. Skipping Flatpak updates.${RESET}"
 fi
 
+echo -e "${CYAN}Removing unused Flatpak runtimes...${RESET}"
+flatpak uninstall --unused -y
+
 echo -e "${GREEN}System update completed.${RESET}"
 echo -e "${BLUE}Check logs:${RESET} cat /var/log/pacman.log | tail -n 20"
-echo -e "${BLUE}Reboot if necessary.${RESET}"
+if [ -f /var/run/reboot-required ]; then
+    echo -e "${RED}Reboot required.${RESET}"
+else
+    echo -e "${GREEN}No reboot required.${RESET}"
+fi
+
