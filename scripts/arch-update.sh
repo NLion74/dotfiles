@@ -44,12 +44,20 @@ else
 fi
 EOF
 
-# Back to user mode for AUR updates
+# User operations AUR
 if command -v $AUR_HELPER &> /dev/null; then
     echo -e "${CYAN}Updating AUR packages with $AUR_HELPER...${RESET}"
     $AUR_HELPER -Syu --noconfirm
 else
     echo -e "${YELLOW}AUR helper ($AUR_HELPER) not found. Skipping AUR updates.${RESET}"
+fi
+
+# Flatpak updates
+if command -v flatpak &> /dev/null; then
+    echo -e "${CYAN}Updating Flatpak applications...${RESET}"
+    flatpak update -y
+else
+    echo -e "${YELLOW}Flatpak not found. Skipping Flatpak updates.${RESET}"
 fi
 
 echo -e "${GREEN}System update completed.${RESET}"
