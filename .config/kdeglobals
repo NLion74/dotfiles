@@ -146,6 +146,7 @@ UseSystemBell=true
 
 [KDE]
 LookAndFeelPackage=com.github.vinceliuice.Layan
+ShowDeleteCommand=false
 widgetStyle=Breeze
 
 [KFileDialog Settings]
@@ -167,6 +168,10 @@ Sort hidden files last=false
 Sort reversed=false
 Speedbar Width=140
 View Style=DetailTree
+
+[PreviewSettings]
+EnableRemoteFolderThumbnail=false
+MaximumRemoteSize=0
 
 [Sounds]
 Enable=false

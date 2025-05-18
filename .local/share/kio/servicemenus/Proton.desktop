@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=KonqPopupMenu/Plugin,all/allfiles
+MimeType=application/x-dosexec
+Actions=Proton
+X-KDE-Priority=TopLevel
+X-KDE-StartupNotify=true
+X-KDE-Submenu=Proton
+
+
+[Desktop Action Proton]
+Name=Proton
+Exec=/bin/Proton.sh %f;
