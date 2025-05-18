@@ -1,8 +1,7 @@
 #!/bin/bash
-set -e
+set -euo pipefail
 
 AUR_HELPER="paru"
-USER_NAME="nlion"
 
 RED='\e[31m'
 GREEN='\e[32m'
@@ -11,6 +10,8 @@ BLUE='\e[34m'
 CYAN='\e[36m'
 RESET='\e[0m'
 
+KEEP_CACHE_VERSIONS=3
+
 echo -e "${RED}Root required for execution.${RESET}"
 
 # Ask for sudo access at the beginning
@@ -18,6 +19,8 @@ sudo -v
 
 # Root operations grouped together
 sudo bash <<EOF
+set -e
+
 echo -e "${CYAN}Refreshing package database...${RESET}"
 pacman -Sy
 
@@ -36,15 +39,19 @@ pacman -Syu --noconfirm
 
 echo -e "${CYAN}Cleaning package cache...${RESET}"
 if command -v paccache &> /dev/null; then
-    paccache -r
+    paccache -r -k ${KEEP_CACHE_VERSIONS}
 else
     echo -e "${YELLOW}paccache not found. Installing pacman-contrib...${RESET}"
     pacman -S --noconfirm pacman-contrib
-    paccache -r
+    paccache -r -k ${KEEP_CACHE_VERSIONS}
 fi
+
+# Remove old journal logs
+echo -e "${CYAN}Cleaning journal logs older than 7 days...${RESET}"
+journalctl --vacuum-time=7d
 EOF
 
-# User operations AUR
+# User-level operations
 if command -v $AUR_HELPER &> /dev/null; then
     echo -e "${CYAN}Updating AUR packages with $AUR_HELPER...${RESET}"
     $AUR_HELPER -Syu --noconfirm
@@ -56,18 +63,18 @@ fi
 if command -v flatpak &> /dev/null; then
     echo -e "${CYAN}Updating Flatpak applications...${RESET}"
     flatpak update -y
+
+    echo -e "${CYAN}Removing unused Flatpak runtimes...${RESET}"
+    flatpak uninstall --unused -y
 else
     echo -e "${YELLOW}Flatpak not found. Skipping Flatpak updates.${RESET}"
 fi
 
-echo -e "${CYAN}Removing unused Flatpak runtimes...${RESET}"
-flatpak uninstall --unused -y
-
+# Check for needed reboot
 echo -e "${GREEN}System update completed.${RESET}"
-echo -e "${BLUE}Check logs:${RESET} cat /var/log/pacman.log | tail -n 20"
+
 if [ -f /var/run/reboot-required ]; then
     echo -e "${RED}Reboot required.${RESET}"
 else
     echo -e "${GREEN}No reboot required.${RESET}"
 fi
-
