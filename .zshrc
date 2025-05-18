@@ -2,7 +2,7 @@
 source ~/.zsh/zinit/zinit.zsh
 
 # Syntax highlighting
-zinit ice wait lucid
+zinit ice lucid
 zinit light zdharma-continuum/fast-syntax-highlighting
 
 # Autosuggestions
@@ -13,9 +13,14 @@ zinit light zsh-users/zsh-autosuggestions
 zinit ice wait lucid
 zinit light zsh-users/zsh-completions
 
-# Aliases
-alias la='ls -a'
-alias archupdate="~/scripts/arch-update.sh"
+# Alias Tips
+zinit ice wait lucid depth=1
+zinit light djui/alias-tips
+
+# Load aliases from separate file
+if [ -f ~/.zsh_aliases ]; then
+  source ~/.zsh_aliases
+fi
 
 # History config
 HISTFILE=~/.zsh_history
@@ -34,7 +39,6 @@ setopt EXTENDED_HISTORY         # Add timestamps
 
 export HISTTIMEFORMAT="%F %T "
 
-
 # Fix 'Home' (Pos1) key to go to the start of the line
 bindkey "^[[H" beginning-of-line  # for xterm, iTerm, and similar terminals
 bindkey "^[[1~" beginning-of-line # for some other terminals
@@ -51,4 +55,5 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
+# Commands to run on shell start
 neofetch

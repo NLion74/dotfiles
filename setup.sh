@@ -63,6 +63,9 @@ echo "Backing up existing dotfiles..."
 if [ -f "$HOME/.zshrc" ]; then
     mv "$HOME/.zshrc" "$HOME/.zshrc.bak"
 fi
+if [ -d "$HOME/.zsh_aliases" ]; then
+    mv "$HOME/.zsh_aliases" "$HOME/.zsh_aliases"
+fi
 if [ -f "$HOME/.config/starship.toml" ]; then
     mv "$HOME/.config/starship.toml" "$HOME/.config/starship.toml.bak"
 fi
@@ -106,6 +109,7 @@ fi
 echo "Creating symlinks for dotfiles..."
 
 ln -sf "$DOTFILES_DIR/.zshrc" "$HOME/.zshrc"
+ln -sf "$DOTFILES_DIR/.zsh_aliases" "$HOME/.zsh_aliases"
 ln -sf "$DOTFILES_DIR/scripts" "$HOME/scripts"
 ln -sf "$DOTFILES_DIR/.config/starship.toml" "$HOME/.config/starship.toml"
 ln -sf "$DOTFILES_DIR/.fonts" "$HOME/.fonts"

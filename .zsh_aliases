@@ -1,0 +1,138 @@
+# ----------------------------
+# Aliases
+# ----------------------------
+
+# Navigation
+alias la='ls -a'
+alias ll='ls -lh'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+
+# Simple http Server
+alias serve='python -m SimpleHTTPServer'
+
+# Use 'grep' with color highlighting by default
+alias grep='grep --color=auto'
+
+# File Manipulation
+alias n='nano'
+
+# Confirmation
+alias mv='mv -i'
+alias cp='cp -i'
+alias ln='ln -i'
+alias rm='rm -I --preserve-root'
+alias chown='chown --preserve-root'
+alias chmod='chmod --preserve-root'
+alias chgrp='chgrp --preserve-root'
+
+# System Information
+alias meminfo="free -m -l -t"
+alias usage='du -ch | grep total'
+alias totalusage='df -hl --total | grep total'
+
+# ----------------------------
+# Functions or Scripts
+# ----------------------------
+
+# Scripts
+alias archupdate="~/scripts/arch-update.sh"
+
+# Functions
+mkcd() {
+  mkdir $1 && cd $_
+}
+
+mostusage() {
+  sudo du -hsx * | sort -rh | head -20
+}
+
+history() {
+  if [[ -n $1 && $1 =~ '^[0-9]+$' ]]; then
+    fc -l -$1
+  else
+    fc -l -100
+  fi
+}
+
+extract() {
+  # Usage: extract <archive-file> [format]
+  local file="$1"
+  local fmt="$2"
+
+  # Validate the archive file argument
+  if [[ -z $file ]]; then
+    echo "Usage: extract <archive-file> [format]"
+    echo "Formats: tar.bz2, tar.gz, tar.xz, tbz2, tgz, bz2, rar, gz, tar, zip, xz, 7z"
+    return 1
+  fi
+
+  # If no format specified, infer from extension
+  if [[ -z $fmt ]]; then
+    case "$file" in
+      *.tar.bz2) fmt="tar.bz2" ;;
+      *.tbz2)    fmt="tbz2"    ;;
+      *.tar.gz)  fmt="tar.gz"  ;;
+      *.tgz)     fmt="tgz"     ;;
+      *.tar.xz)  fmt="tar.xz"  ;;
+      *.tar)     fmt="tar"     ;;
+      *.bz2)     fmt="bz2"     ;;
+      *.rar)     fmt="rar"     ;;
+      *.gz)      fmt="gz"      ;;
+      *.zip)     fmt="zip"     ;;
+      *.xz)      fmt="xz"      ;;
+      *.7z)      fmt="7z"      ;;
+      *)
+        echo "extract: cannot infer format for '$file'"
+        return 1
+        ;;
+    esac
+  fi
+
+  # Dispatch extraction based on chosen format
+  case "$fmt" in
+    tar.bz2) tar xvjf "$file"   ;;
+    tbz2)    tar xvjf "$file"   ;;
+    tar.gz)  tar xvzf "$file"   ;;
+    tgz)     tar xvzf "$file"   ;;
+    tar.xz)  tar xvJf "$file"   ;;
+    tar)     tar xvf "$file"    ;;
+    bz2)     bunzip2 "$file"    ;;
+    rar)     unrar x "$file"    ;;
+    gz)      gunzip "$file"     ;;
+    zip)     unzip "$file"      ;;
+    xz)      unxz "$file"       ;;
+    7z)      7z x "$file"       ;;
+    *)
+      echo "extract: unknown format '$fmt'"
+      return 1
+      ;;
+  esac
+}
+
+compress() {
+  if [ $# -lt 1 ] || [ $# -gt 2 ]; then
+    echo "Usage: compress <file-or-dir> [format]"
+    echo "Formats: tar.gz, tar.bz2, tar.xz, zip, 7z"
+    return 1
+  fi
+
+  local tgt=$1
+  local fmt=${2:-tar.gz}           # default format if none given
+  local base=${tgt%/}; base=${base##*/}
+  local out="${base}.${fmt}"
+
+  case "$fmt" in
+    tar.gz)  tar czvf "$out" "$tgt"    ;;
+    tar.bz2) tar cjvf "$out" "$tgt"    ;;
+    tar.xz)  tar cJvf "$out" "$tgt"    ;;
+    zip)     zip -r "$out" "$tgt"      ;;
+    7z)      7z a "$out" "$tgt"        ;;
+    *)
+      echo "compress: unknown format '$fmt'"
+      echo "Valid formats: tar.gz, tar.bz2, tar.xz, zip, 7z"
+      return 1
+      ;;
+  esac
+}
