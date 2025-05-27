@@ -3,5 +3,5 @@ Autolock=false
 Timeout=0
 
 [Greeter][Wallpaper][org.kde.image][General]
-Image=/home/nlion/Downloads/download.jpeg
-PreviewImage=/home/nlion/Downloads/download.jpeg
+Image=/home/nlion/dotfiles/data/wallpaper.jpeg
+PreviewImage=/home/nlion/dotfiles/data/wallpaper.jpeg

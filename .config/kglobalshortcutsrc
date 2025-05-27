@@ -1,5 +1,6 @@
 [ActivityManager]
 _k_friendly_name=Activity Manager
+switch-to-activity-51dc9632-2f38-4ce7-90e6-3e55f9b7ad30=none,none,Switch to activity "Default"
 switch-to-activity-5fda7a21-4428-40a2-a7a1-37488a28c807=none,none,Switch to activity "Default"
 
 [KDE Keyboard Layout Switcher]
@@ -258,6 +259,9 @@ toggle do not disturb=none,,Toggle do not disturb
 
 [services][Alacritty.desktop]
 _launch=Ctrl+Alt+T
+
+[services][org.kde.konsole.desktop]
+_launch=none
 
 [services][org.kde.plasma-systemmonitor.desktop]
 _launch=Ctrl+Shift+Esc\tMeta+Esc
