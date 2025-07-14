@@ -58,6 +58,15 @@ fi
 
 chsh -s $(which zsh)
 
+echo "Applying SDDM Astronaut Theme..."
+
+if command -v sddm >/dev/null 2>&1; then
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/keyitdev/sddm-astronaut-theme/master/setup.sh)"
+    echo "SDDM theme applied successfully."
+else
+    echo "SDDM is not installed. Skipping theme application."
+fi
+
 echo "Backing up existing dotfiles..."
 
 if [ -f "$HOME/.zshrc" ]; then
