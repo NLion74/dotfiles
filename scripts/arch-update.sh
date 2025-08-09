@@ -29,7 +29,7 @@ pacman -S --noconfirm archlinux-keyring
 
 echo -e "${CYAN}Updating mirror list...${RESET}"
 if command -v reflector &> /dev/null; then
-    reflector --latest 5 --sort rate --save /etc/pacman.d/mirrorlist
+    reflector --protocol https --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
 else
     echo -e "${YELLOW}Reflector not found. Skipping mirror update.${RESET}"
 fi
