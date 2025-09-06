@@ -46,7 +46,11 @@ mkcd() {
 }
 
 mostusage() {
-  sudo du -hsx * | sort -rh | head -20
+  local dir="${1:-.}"   # default to current directory if none specified
+  local count="${2:-20}" # default to top 20 if not specified
+
+  sudo du -hsx "$dir"/* "$dir"/.[!.]* "$dir"/..?* 2>/dev/null \
+    | sort -rh | head -n "$count"
 }
 
 history() {

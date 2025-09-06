@@ -134,7 +134,7 @@ ForegroundVisited=155,89,182
 
 [DirSelect Dialog]
 DirSelectDialog Size=960,540
-History Items[$e]=file:$HOME/HeroicGames/Celeste/Saves,file:$HOME/HeroicGames,file:$HOME,file:$HOME/Games/Heroic/Celeste/Saves,file:///mnt/Media/Anime/86 Eighty Six/Season 1,file:$HOME
+History Items[$e]=file:$HOME/Data/other/Projects/PHP/php-font-lib-fork/php-font-lib/src/FontLib/Table/Type,file:$HOME/HeroicGames/Celeste/Saves,file:$HOME/HeroicGames,file:$HOME,file:$HOME/Games/Heroic/Celeste/Saves,file:///mnt/Media/Anime/86 Eighty Six/Season 1,file:$HOME
 Splitter State=\x00\x00\x00\xff\x00\x00\x00\x01\x00\x00\x00\x02\x00\x00\x00\x8c\x00\x00\x02\xa8\x00\xff\xff\xff\xff\x01\x00\x00\x00\x01\x00
 
 [General]
