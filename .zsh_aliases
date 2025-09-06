@@ -32,6 +32,8 @@ alias meminfo="free -m -l -t"
 alias usage='du -ch | grep total'
 alias totalusage='df -hl --total | grep total'
 
+alias reload="source ~/.zshrc"
+
 # ----------------------------
 # Functions or Scripts
 # ----------------------------
@@ -45,11 +47,14 @@ mkcd() {
   mkdir $1 && cd $_
 }
 
+# mostusage <dir> <count>
+# List the 'count' (default 20) largest subdirectories in 'dir' (
+# default current directory)
 mostusage() {
-  local dir="${1:-.}"   # default to current directory if none specified
-  local count="${2:-20}" # default to top 20 if not specified
+  local dir="${1:-.}"
+  local count="${2:-20}"
 
-  sudo du -hsx "$dir"/* "$dir"/.[!.]* "$dir"/..?* 2>/dev/null \
+  sudo du -hax --max-depth=1 "$dir" 2>/dev/null \
     | sort -rh | head -n "$count"
 }
 
