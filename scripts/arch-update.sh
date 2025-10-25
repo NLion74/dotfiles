@@ -11,6 +11,27 @@ CYAN='\e[36m'
 RESET='\e[0m'
 
 KEEP_CACHE_VERSIONS=3
+SKIP_REFLECTOR=false
+
+# Parse arguments
+for arg in "$@"; do
+    case $arg in
+        --skip-reflector)
+            SKIP_REFLECTOR=true
+            shift
+            ;;
+        -h|--help)
+            echo "Usage: $0 [--skip-reflector]"
+            echo
+            echo "Options:"
+            echo "  --skip-reflector   Skip updating the mirrorlist with reflector"
+            exit 0
+            ;;
+        *)
+            echo -e "${YELLOW}Warning:${RESET} Unknown option '$arg' (ignored)"
+            ;;
+    esac
+done
 
 echo -e "${RED}Root required for execution.${RESET}"
 
@@ -18,7 +39,7 @@ echo -e "${RED}Root required for execution.${RESET}"
 sudo -v
 
 # Root operations grouped together
-sudo bash <<EOF
+sudo bash -euo pipefail <<EOF
 set -e
 
 echo -e "${CYAN}Refreshing package database...${RESET}"
@@ -27,11 +48,15 @@ pacman -Sy
 echo -e "${CYAN}Updating Arch keyring...${RESET}"
 pacman -S --noconfirm archlinux-keyring
 
-echo -e "${CYAN}Updating mirror list...${RESET}"
-if command -v reflector &> /dev/null; then
-    reflector --protocol https --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
+if [ "$SKIP_REFLECTOR" = false ]; then
+    echo -e "${CYAN}Updating mirror list...${RESET}"
+    if command -v reflector &> /dev/null; then
+        reflector --protocol https --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
+    else
+        echo -e "${YELLOW}Reflector not found. Skipping mirror update.${RESET}"
+    fi
 else
-    echo -e "${YELLOW}Reflector not found. Skipping mirror update.${RESET}"
+    echo -e "${YELLOW}Skipping mirror update (requested via --skip-reflector).${RESET}"
 fi
 
 echo -e "${CYAN}Upgrading system packages...${RESET}"

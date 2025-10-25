@@ -151,7 +151,7 @@ immutability=1
 plugin=org.kde.plasma.clipboard
 
 [Containments][2][Applets][7][Applets][19][Configuration]
-PreloadWeight=75
+PreloadWeight=80
 
 [Containments][2][Applets][7][Applets][22]
 immutability=1
@@ -165,7 +165,7 @@ immutability=1
 plugin=org.kde.plasma.brightness
 
 [Containments][2][Applets][7][Applets][23][Configuration]
-PreloadWeight=15
+PreloadWeight=25
 
 [Containments][2][Applets][7][Applets][24]
 immutability=1
@@ -213,7 +213,7 @@ immutability=1
 plugin=org.kde.plasma.mediacontroller
 
 [Containments][2][Applets][7][Applets][27][Configuration]
-PreloadWeight=0
+PreloadWeight=10
 
 [Containments][2][Applets][7][Applets][75]
 immutability=1
@@ -429,6 +429,13 @@ plugin=org.kde.kscreen
 [Containments][29][Applets][34][Applets][47][Configuration][General]
 migrated=true
 
+[Containments][29][Applets][34][Applets][48]
+immutability=1
+plugin=org.kde.plasma.volume
+
+[Containments][29][Applets][34][Applets][48][Configuration][General]
+migrated=true
+
 [Containments][29][Applets][34][Applets][49]
 immutability=1
 plugin=org.kde.plasma.battery
@@ -452,7 +459,7 @@ immutability=1
 plugin=org.kde.plasma.mediacontroller
 
 [Containments][29][Applets][34][Applets][76][Configuration]
-PreloadWeight=10
+PreloadWeight=0
 
 [Containments][29][Applets][34][Configuration]
 PreloadWeight=65
@@ -597,6 +604,13 @@ plugin=org.kde.kscreen
 [Containments][52][Applets][57][Applets][70][Configuration][General]
 migrated=true
 
+[Containments][52][Applets][57][Applets][71]
+immutability=1
+plugin=org.kde.plasma.volume
+
+[Containments][52][Applets][57][Applets][71][Configuration][General]
+migrated=true
+
 [Containments][52][Applets][57][Applets][72]
 immutability=1
 plugin=org.kde.plasma.battery
@@ -620,7 +634,7 @@ immutability=1
 plugin=org.kde.plasma.mediacontroller
 
 [Containments][52][Applets][57][Applets][75][Configuration]
-PreloadWeight=10
+PreloadWeight=0
 
 [Containments][52][Applets][57][Configuration]
 PreloadWeight=55

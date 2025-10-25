@@ -140,7 +140,7 @@ Splitter State=\x00\x00\x00\xff\x00\x00\x00\x01\x00\x00\x00\x02\x00\x00\x00\x8c\
 [General]
 AccentColor=146,110,228
 BrowserApplication=google-chrome.desktop
-ColorSchemeHash=8ff306d9a93379c74540e00506966df24df1798b
+ColorSchemeHash=2c3f86428c11011a7c64ee1e7f47c274d498ff10
 LastUsedCustomAccentColor=146,110,228
 UseSystemBell=true
 
@@ -156,9 +156,6 @@ Allow Expansion=false
 Automatically select filename extension=true
 Breadcrumb Navigation=false
 Decoration position=2
-LocationCombo Completionmode=5
-PathCombo Completionmode=5
-Show Bookmarks=false
 Show Full Path=false
 Show Inline Previews=true
 Show Preview=false
