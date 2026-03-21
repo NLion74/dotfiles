@@ -119,7 +119,8 @@ ln -sf "$DOTFILES_DIR/.config/starship.toml" "$HOME/.config/starship.toml"
 ln -sf "$DOTFILES_DIR/.config/dolphinrc" "$HOME/.config/dolphinrc"
 ln -sf "$DOTFILES_DIR/.config/autostart/mount.desktop" "$HOME/.config/autostart/mount.desktop"
 
-ln -sf "$DOTFILES_DIR/.fonts" "$HOME/.local/share/fonts"
+# dont fuck this up, crashed my entire system
+ln -sf "$DOTFILES_DIR/.fonts" "$HOME/.fonts"
 fc-cache -fv
 
 echo "Dotfiles setup complete!"
