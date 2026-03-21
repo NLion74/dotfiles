@@ -1,0 +1,64 @@
+(defpoll sink_vol :interval "1s" `~/.config/eww/scripts/audio.sh sink-vol`)
+(defpoll source_vol :interval "1s" `~/.config/eww/scripts/audio.sh source-vol`)
+(defpoll default_sink_id :interval "2s" `~/.config/eww/scripts/audio.sh default-sink-id`)
+(defpoll default_source_id :interval "2s" `~/.config/eww/scripts/audio.sh default-source-id`)
+(defpoll sink_muted :interval "1s" `~/.config/eww/scripts/audio.sh sink-muted`)
+(defpoll source_muted :interval "1s" `~/.config/eww/scripts/audio.sh source-muted`)
+(defpoll sinks :interval "3s" :initial "[]" `~/.config/eww/scripts/audio.sh sinks`)
+(defpoll sources :interval "3s" :initial "[]" `~/.config/eww/scripts/audio.sh sources`)
+(defwindow audio
+  :monitor 0
+  :geometry (geometry :x "8px" :y "44px" :width "340px" :height "300px" :anchor "top right")
+  :stacking "overlay"
+  :focusable false
+  (audio-popup))
+
+(defwidget audio-popup []
+  (box :class "audio-popup" :orientation "v" :spacing 8
+    (box :class "row" :orientation "h" :spacing 8
+      (button
+      :class "mini-btn"
+      :onclick "~/.config/eww/scripts/audio.sh toggle-sink-mute"
+      { sink_muted == "true" ? "󰝟" : "" })
+      (scale
+        :class "audio-scale"
+        :hexpand true
+        :draw-value false
+        :min 0
+        :max 150
+        :value {sink_vol}
+        :onchange "~/.config/eww/scripts/audio.sh set-sink-vol {}")
+      (label :class "pct" :text "${sink_vol}%"))
+
+    (label :class "label" :xalign 0 :text "Output")
+    (scroll :vscroll true :hscroll false
+      (box :class "device-list outputs" :orientation "v" :spacing 6
+        (for s in sinks
+          (button
+            :class { s.id == default_sink_id ? "device-btn active" : "device-btn" }
+            :onclick "~/.config/eww/scripts/audio.sh set-sink '${s.id}'"
+            (label :xalign 0 :truncate true :text "${s.label}")))))
+
+    (box :class "row" :orientation "h" :spacing 8
+      (button
+      :class "mini-btn"
+      :onclick "~/.config/eww/scripts/audio.sh toggle-source-mute"
+      { source_muted == "true" ? "" : "" })
+      (scale
+        :class "audio-scale"
+        :hexpand true
+        :draw-value false
+        :min 0
+        :max 150
+        :value {source_vol}
+        :onchange "~/.config/eww/scripts/audio.sh set-source-vol {}")
+      (label :class "pct" :text "${source_vol}%"))
+
+    (label :class "label" :xalign 0 :text "Input")
+    (scroll :vscroll true :hscroll false
+      (box :class "device-list inputs" :orientation "v" :spacing 6
+        (for s in sources
+          (button
+            :class { s.id == default_source_id ? "device-btn active" : "device-btn" }
+            :onclick "~/.config/eww/scripts/audio.sh set-source '${s.id}'"
+            (label :xalign 0 :truncate true :text "${s.label}")))))))

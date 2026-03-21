@@ -1,0 +1,68 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 46,
+    "spacing": 8,
+
+    "modules-left": ["hyprland/workspaces", "wlr/taskbar"],
+    "modules-center": ["custom/mediawindow"],
+    "modules-right": ["pulseaudio", "network", "clock", "tray", "custom/power"],
+
+    "wlr/taskbar": {
+        "format": "{icon}",
+        "icon-size": 16,
+        "tooltip-format": "{title}",
+        "all-outputs": false,
+        "active-first": true,
+        "on-click": "activate",
+        "on-click-middle": "close",
+    },
+
+    "hyprland/workspaces": {
+        "disable-scroll": false,
+        "all-outputs": false,
+        "format": "{name}",
+    },
+
+    "custom/mediawindow": {
+        "exec": "/home/nlion/.config/waybar/scripts/mediawindow.sh",
+        "return-type": "json",
+        "interval": 0.5,
+        "max-length": 48,
+        "tooltip": true,
+    },
+
+    "pulseaudio": {
+        "format": "{icon} {volume}%",
+        "format-muted": "󰖁 mute",
+        "format-icons": {
+            "default": ["", "", ""],
+        },
+        "on-click": "/home/nlion/.config/eww/scripts/open-audio.sh",
+        "on-click-middle": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+    },
+
+    "network": {
+        "format-wifi": "",
+        "format-ethernet": "󰈀",
+        "format-disconnected": "󰖪",
+        "tooltip": true,
+        "on-click": "nm-connection-editor",
+    },
+
+    "clock": {
+        "format": "{:%H:%M}",
+        "format-alt": "{:%d.%m.%Y}",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+    },
+
+    "tray": {
+        "spacing": 8,
+    },
+
+    "custom/power": {
+        "format": "",
+        "tooltip": false,
+        "on-click": "/home/nlion/.config/wofi/powermenu.sh",
+    },
+}
