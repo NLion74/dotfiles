@@ -1,0 +1,82 @@
+* {{
+    all: unset;
+    font-family: Inter, "JetBrainsMono Nerd Font", sans-serif;
+    font-size: 12px;
+    color: {foreground};
+}}
+
+.audio-popup {{
+    background: rgba({background.rgb}, 0.97);
+    border-radius: 12px;
+    padding: 10px;
+    min-width: 340px;
+    min-height: 300px;
+    border: 1px solid rgba({foreground.rgb}, 0.08);
+}}
+
+.row {{
+    background: rgba({foreground.rgb}, 0.04);
+    padding: 8px 10px;
+    border-radius: 10px;
+}}
+
+.label {{
+    color: {color5};
+    font-size: 11px;
+    font-weight: 700;
+    margin-top: 2px;
+}}
+
+.audio-scale {{
+    min-width: 210px;
+}}
+
+.pct {{
+    min-width: 38px;
+    color: {color5};
+}}
+
+.device-list {{
+    background: rgba({foreground.rgb}, 0.03);
+    border-radius: 10px;
+    padding: 6px;
+}}
+
+.device-list.outputs,
+.device-list.inputs {{
+    min-height: 68px;
+}}
+
+.device-btn {{
+    background: rgba({foreground.rgb}, 0.03);
+    padding: 9px 10px;
+    border-radius: 8px;
+}}
+
+.device-btn.active {{
+    background: rgba({color5.rgb}, 0.18);
+}}
+
+.mini-btn {{
+    background: rgba({foreground.rgb}, 0.05);
+    padding: 4px 8px;
+    border-radius: 8px;
+}}
+
+scale trough {{
+    background: rgba({foreground.rgb}, 0.08);
+    border-radius: 999px;
+    min-height: 6px;
+}}
+
+scale highlight {{
+    background: {color5};
+    border-radius: 999px;
+}}
+
+scale slider {{
+    background: {color7};
+    border-radius: 999px;
+    min-width: 12px;
+    min-height: 12px;
+}}

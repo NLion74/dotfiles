@@ -1,0 +1,70 @@
+* {{
+    border: none;
+    border-radius: 0;
+    font-family: Inter, "JetBrainsMono Nerd Font", sans-serif;
+    font-size: 13px;
+    min-height: 0;
+}}
+
+#workspaces,
+#custom-mediawindow,
+#pulseaudio,
+#network,
+#clock,
+#tray,
+#custom-power {{
+    margin: 6px 4px;
+    padding: 6px 12px;
+    background: rgba({foreground.rgb}, 0.06);
+    border-radius: 12px;
+    color: {foreground};
+}}
+
+#custom-mediawindow.spotify {{
+    color: {color2};
+}}
+
+#custom-mediawindow.window {{
+    color: {foreground};
+}}
+
+#custom-mediawindow.empty {{
+    color: {color8};
+}}
+
+#workspaces button {{
+    padding: 0 6px;
+    margin: 2px 3px;
+    color: {color8};
+    background: transparent;
+    border-radius: 8px;
+}}
+
+#workspaces button.active {{
+    background: rgba({foreground.rgb}, 0.12);
+    color: {foreground};
+}}
+
+#workspaces button:hover {{
+    background: rgba({foreground.rgb}, 0.10);
+}}
+
+#custom-power {{
+    color: {color1};
+}}
+
+#taskbar {{
+    background: transparent;
+}}
+
+#taskbar button {{
+    padding: 0 6px;
+    margin: 2px 3px;
+    background: transparent;
+    border-radius: 8px;
+    color: {foreground};
+}}
+
+#taskbar button.active {{
+    background: rgba({foreground.rgb}, 0.12);
+}}
