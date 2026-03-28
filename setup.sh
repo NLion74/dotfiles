@@ -16,9 +16,12 @@ command_exists() {
     command -v "$1" &> /dev/null
 }
 
+BACKUP_DIR="$HOME/.dotfiles-backup/$(date +%Y-%m-%d_%H-%M-%S)"
+
 backup() {
     if [ -e "$1" ]; then
-        mv "$1" "$1.$(date +%s).bak"
+        mkdir -p "$BACKUP_DIR"
+        mv "$1" "$BACKUP_DIR/"
     fi
 }
 
@@ -76,7 +79,10 @@ for pkg in \
     starship \
     zsh \
     git \
-    python-pywalfox
+    python-pywalfox \
+    spicetify-cli-git \
+    pywal-spicetify
+
 do
     if command_exists "$pkg"; then
         echo "$pkg is already installed."

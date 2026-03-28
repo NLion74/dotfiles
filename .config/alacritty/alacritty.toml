@@ -6,19 +6,8 @@ bold_italic = { family = "JetBrainsMono Nerd Font", style = "Bold Italic" }
 size = 12
 builtin_box_drawing = true
 
-[colors.primary]
-background = "#282a36"
-foreground = "#f8f8f2"
-
-[colors.normal]
-black   = "#21222c"
-red     = "#ff5555"
-green   = "#50fa7b"
-yellow  = "#f1fa8c"
-blue    = "#bd93f9"
-magenta = "#ff79c6"
-cyan    = "#8be9fd"
-white   = "#f8f8f2"
+[general]
+import = ["~/.config/alacritty/colors.toml"]
 
 [window]
 opacity = 0.85
@@ -29,3 +18,4 @@ y = 10
 
 [cursor]
 style = "Beam"
+

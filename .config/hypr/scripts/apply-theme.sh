@@ -4,41 +4,61 @@ set -euo pipefail
 if [ $# -gt 0 ]; then
     wall="$1"
 else
-    wall="$(find "$HOME/dotfiles/data" -type f \( -name "*.jpg" -o -name "*.png" \) \
-        | wofi --dmenu --prompt="Select wallpaper" || true)"
+    wall="$(
+        while IFS= read -r -d '' f; do
+            printf 'img:%s:text:%s\n' "$f" "$(basename "$f")"
+        done < <(
+            find "$HOME/dotfiles/data" -type f \
+              \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \) \
+              -print0
+        ) | wofi --dmenu \
+            --prompt="Select wallpaper" \
+            --allow-images \
+            --image-size=160 \
+            --parse-search \
+        || true
+    )"
+
+    [ -z "${wall:-}" ] && exit 1
+
+    wall="${wall#img:}"
+    wall="${wall%%:text:*}"
 fi
 
-[ -z "$wall" ] && exit 1
+[ -z "${wall:-}" ] && exit 1
 
 mkdir -p \
   "$HOME/.config/alacritty" \
   "$HOME/.config/waybar" \
-  "$HOME/.config/eww" \
-  "$HOME/.config/gtk-3.0"
+  "$HOME/.config/eww"
 
-if pgrep -x hyprpaper >/dev/null; then
-  hyprctl hyprpaper preload "$wall" || true
-  hyprctl hyprpaper wallpaper ",$wall" || true
+if [[ -f "$wall" ]]; then
+    hyprctl hyprpaper preload "$wall" || true
+    hyprctl hyprpaper wallpaper ",$wall" || true
 fi
 
 wal -i "$wall" -q
+pywalfox update || true
 
-[ -f "$HOME/.cache/wal/colors.sh" ] && source "$HOME/.cache/wal/colors.sh"
+copy_if_exists() {
+  local src="$1"
+  local dst="$2"
 
-pywalfox update
+  if [[ -f "$src" ]]; then
+    mkdir -p "$(dirname "$dst")"
+    install -Dm644 "$src" "$dst"
+  else
+    printf 'pywal missing output: %s\n' "$src" >&2
+  fi
+}
 
-cp -f "$HOME/.cache/wal/colors-alacritty" "$HOME/.config/alacritty/colors.yml" 2>/dev/null || true
-cp -f "$HOME/.cache/wal/waybar.css" "$HOME/.config/waybar/style.css" 2>/dev/null || true
-cp -f "$HOME/.cache/wal/eww.scss" "$HOME/.config/eww/eww.scss" 2>/dev/null || true
-
-cp -f "$HOME/.cache/wal/00-gtk-theme.json" "$HOME/.config/gtk-3.0/settings.ini" 2>/dev/null || true
-cp -f "$HOME/.cache/wal/gtk.css" "$HOME/.config/gtk-3.0/gtk.css" 2>/dev/null || true
-gsettings set org.gnome.desktop.interface gtk-theme 'Wal' || true
-
-cp -f "$HOME/.cache/wal/colors-starship.toml" "$HOME/.config/starship/palette.toml" 2>/dev/null || true
+copy_if_exists "$HOME/.cache/wal/alacritty.toml" "$HOME/.config/alacritty/colors.toml"
+copy_if_exists "$HOME/.cache/wal/waybar.css"     "$HOME/.config/waybar/style.css"
+copy_if_exists "$HOME/.cache/wal/eww.scss"       "$HOME/.config/eww/eww.scss"
+copy_if_exists "$HOME/.cache/wal/starship.toml"  "$HOME/.config/starship.toml"
 
 pkill waybar || true
-waybar & disown
+waybar >/dev/null 2>&1 & disown
 
 eww reload || true
 hyprctl reload || true
