@@ -2,7 +2,7 @@
 
 # executes same behaviour as below but with support for images
 #
-# cliphist list | wofi --dmenu | cliphist decode
+# cliphist list | rofi --dmenu | cliphist decode
 #
 # produces thumbnails and stores them in XDG_CACHE_HOME
 # note: does NOT put in clipboard, call wl-copy yourself!
@@ -37,9 +37,9 @@ match(\$0, /^([0-9]+)\s(\[\[\s)?binary.*(jpg|jpeg|png|bmp)/, grp) {
 1
 EOF
 
-choice=$(gawk <<< $cliphist_list "$prog" | wofi -I --dmenu --cache-file=/dev/null -Dimage_size=100 -Dynamic_lines=true)
+choice=$(gawk "$prog" <<< "$cliphist_list" | rofi -dmenu --cache-file=/dev/null -Dimage_size=100 -Dynamic_lines=true)
 
-# stop execution if nothing selected in wofi menu
+# stop execution if nothing selected in rofi menu
 [ -z "$choice" ] && exit 1
 
 if [ "${choice::4}" = "img:" ]; then

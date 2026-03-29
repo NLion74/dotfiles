@@ -22,7 +22,6 @@ restore_spotify_state() {
 
   [ -z "$TRACK_ID" ] && return
 
-  # Play track
   dbus-send --print-reply \
     --dest=org.mpris.MediaPlayer2.spotify \
     /org/mpris/MediaPlayer2 \
@@ -31,7 +30,6 @@ restore_spotify_state() {
 
   sleep 1
 
-  # Seek (microseconds → milliseconds)
   dbus-send --print-reply \
     --dest=org.mpris.MediaPlayer2.spotify \
     /org/mpris/MediaPlayer2 \
@@ -51,78 +49,50 @@ copy_if_exists() {
   fi
 }
 
-ensure_spicetify_pywal_theme() {
-  local theme_dir="$HOME/.config/spicetify/Themes/pywal"
-
-  mkdir -p "$theme_dir"
-
-  if [[ ! -f "$theme_dir/user.css" ]]; then
-    cat > "$theme_dir/user.css" <<'EOF'
-/* bootstrap file for pywal spicetify theme */
-EOF
-  fi
-
-  if [[ ! -f "$theme_dir/color.ini" ]]; then
-    cat > "$theme_dir/color.ini" <<'EOF'
-[pywal]
-text               = FFFFFF
-subtext            = B3B3B3
-main               = 121212
-sidebar            = 000000
-player             = 181818
-card               = 282828
-shadow             = 000000
-selected-row       = 1DB954
-button             = 1DB954
-button-active      = 1ED760
-button-disabled    = 535353
-tab-active         = 333333
-notification       = 4687D6
-notification-error = E22134
-misc               = 7F7F7F
-EOF
-  fi
-}
-
 apply_spicetify_pywal() {
   command -v spicetify >/dev/null 2>&1 || return 0
   command -v pywal-spicetify >/dev/null 2>&1 || return 0
 
-  ensure_spicetify_pywal_theme
-
   STATE=$(get_spotify_state)
 
-  spicetify config current_theme pywal >/dev/null
+  spicetify config current_theme Dribbblish >/dev/null
   spicetify config color_scheme pywal >/dev/null
-  pywal-spicetify pywal
+  spicetify config inject_css 1 >/dev/null
+  spicetify config replace_colors 1 >/dev/null
+  spicetify config inject_theme_js 1 >/dev/null
+  spicetify config overwrite_assets 1 >/dev/null
+
+  pywal-spicetify Dribbblish
   spicetify apply
 
   sleep 2
   restore_spotify_state "$STATE"
 }
 
+pick_wallpaper_rofi() {
+  local f
+
+  find "$HOME/dotfiles/data" -type f \
+    \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \) -print0 |
+    while IFS= read -r -d '' f; do
+      printf '%s\0display\x1f%s\x1ficon\x1fthumbnail://%s\n' \
+        "$f" "$(basename "$f")" "$f"
+    done |
+    rofi -dmenu -i -no-custom -show-icons \
+      -p "Select wallpaper" \
+      -theme-str '
+        window { width: 34%; }
+        listview { lines: 10; columns: 1; spacing: 4px; }
+        element { padding: 4px; }
+        element-icon { size: 3em; }
+      '
+}
+
 if [ $# -gt 0 ]; then
-    wall="$1"
+  wall="$1"
 else
-    wall="$(
-        while IFS= read -r -d '' f; do
-            printf 'img:%s:text:%s\n' "$f" "$(basename "$f")"
-        done < <(
-            find "$HOME/dotfiles/data" -type f \
-              \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \) \
-              -print0
-        ) | wofi --dmenu \
-            --prompt="Select wallpaper" \
-            --allow-images \
-            --image-size=160 \
-            --parse-search \
-        || true
-    )"
-
-    [ -z "${wall:-}" ] && exit 1
-
-    wall="${wall#img:}"
-    wall="${wall%%:text:*}"
+  wall="$(pick_wallpaper_rofi || true)"
+  [ -z "${wall:-}" ] && exit 1
 fi
 
 [ -z "${wall:-}" ] && exit 1
@@ -130,11 +100,12 @@ fi
 mkdir -p \
   "$HOME/.config/alacritty" \
   "$HOME/.config/waybar" \
-  "$HOME/.config/eww"
+  "$HOME/.config/eww" \
+  "$HOME/.config/starship"
 
 if [[ -f "$wall" ]]; then
-    hyprctl hyprpaper preload "$wall" || true
-    hyprctl hyprpaper wallpaper ",$wall" || true
+  hyprctl hyprpaper preload "$wall" || true
+  hyprctl hyprpaper wallpaper ",$wall" || true
 fi
 
 wal -i "$wall" -q

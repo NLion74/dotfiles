@@ -1,0 +1,25 @@
+configuration {
+    modi: "drun";
+    terminal: "alacritty";
+    drun-display-format: "{name}";
+    display-drun: "Search";
+}
+
+@import "~/.cache/wal/colors-rofi-dark.rasi"
+
+* {
+    font: "JetBrains Mono 12";
+    selected: @selected-normal-background;
+    selected-text: @selected-normal-foreground;
+}
+
+window {
+    location: center;
+    anchor: center;
+    width: 700px;
+    padding: 12px;
+    border: 2px;
+    border-radius: 10px;
+    border-color: @selected;
+    background-color: @background;
+}

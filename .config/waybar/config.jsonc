@@ -63,6 +63,6 @@
     "custom/power": {
         "format": "",
         "tooltip": false,
-        "on-click": "/home/nlion/.config/wofi/powermenu.sh",
+        "on-click": "/home/nlion/.config/waybar/scripts/powermenu.sh",
     },
 }

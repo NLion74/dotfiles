@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
-chosen=$(printf "Lock\nLogout\nSuspend\nHibernate\nReboot\nShutdown" | wofi --dmenu --prompt "Power")
+chosen=$(
+  printf "Lock\nLogout\nSuspend\nHibernate\nReboot\nShutdown" |
+    rofi -dmenu -p "Power" -config ~/.config/rofi/config.rasi
+)
 
 case "$chosen" in
   Lock) loginctl lock-session ;;

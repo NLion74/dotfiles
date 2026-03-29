@@ -1,0 +1,16 @@
+* {
+    background:     {background};
+    foreground:     {foreground};
+    selected:       {color2};
+    active:         {color4};
+    urgent:         {color1};
+
+    normal-background:          @background;
+    normal-foreground:          @foreground;
+    selected-normal-background: @selected;
+    selected-normal-foreground: @background;
+}
+element-text, element-icon {
+    background-color: inherit;
+    text-color: inherit;
+}

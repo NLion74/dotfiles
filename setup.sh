@@ -126,11 +126,19 @@ ensure_git_repo() {
 
     if [ -d "$dest/.git" ]; then
         log "Repo already present: $dest"
-    else
-        log "Cloning $repo_url -> $dest"
-        mkdir -p "$(dirname "$dest")"
-        git clone "$repo_url" "$dest"
+        git -C "$dest" pull --ff-only || warn "Could not update $dest"
+        return 0
     fi
+
+    if [ -d "$dest" ] && [ -n "$(find "$dest" -mindepth 1 -maxdepth 1 -print -quit 2>/dev/null)" ]; then
+        warn "Destination exists and is not an empty git repo: $dest"
+        warn "Skipping clone to avoid overwriting existing files"
+        return 0
+    fi
+
+    log "Cloning $repo_url -> $dest"
+    mkdir -p "$(dirname "$dest")"
+    git clone "$repo_url" "$dest"
 }
 
 apply_sddm_theme() {
@@ -141,6 +149,23 @@ apply_sddm_theme() {
 
     log "Applying SDDM Astronaut Theme"
     bash -c "$(curl -fsSL https://raw.githubusercontent.com/keyitdev/sddm-astronaut-theme/master/setup.sh)"
+}
+
+setup_pywal_sync() {
+    log "Setting up pywal sync"
+
+    if ! command_exists wal; then
+        ensure_official_pkg "python-pywal"
+    fi
+
+    wal -i "$HOME/Pictures/wallpaper.jpg"
+
+    spicetify config current_theme Dribbblish
+    spicetify config color_scheme Dribbblish
+    spicetify config inject_css 1
+    spicetify config replace_colors 1
+    spicetify config inject_theme_js 1
+    pywal-spicetify Dribbblish
 }
 
 parse_args() {
@@ -195,7 +220,7 @@ main() {
         hyprpaper
         hyprsunset
         waybar
-        wofi
+        rofi
         dolphin
         jq
         socat
@@ -229,6 +254,7 @@ main() {
         done
 
         ensure_git_repo "https://github.com/zdharma-continuum/zinit.git" "$HOME/.zsh/zinit"
+        ensure_git_repo "https://github.com/spicetify/spicetify-themes.git" "$HOME/.config/spicetify/Themes"
     else
         log "Skipping package installation"
     fi
@@ -243,7 +269,7 @@ main() {
         backup "$HOME/.config/neofetch"
         backup "$HOME/.config/hypr"
         backup "$HOME/.config/waybar"
-        backup "$HOME/.config/wofi"
+        backup "$HOME/.config/rofi"
         backup "$HOME/.config/eww"
         backup "$HOME/.config/autostart/mount.desktop"
         backup "$HOME/.config/dolphinrc"
@@ -260,7 +286,7 @@ main() {
         copy_dir "$DOTFILES_DIR/.config/neofetch" "$HOME/.config/neofetch"
         copy_dir "$DOTFILES_DIR/.config/hypr" "$HOME/.config/hypr"
         copy_dir "$DOTFILES_DIR/.config/waybar" "$HOME/.config/waybar"
-        copy_dir "$DOTFILES_DIR/.config/wofi" "$HOME/.config/wofi"
+        copy_dir "$DOTFILES_DIR/.config/rofi" "$HOME/.config/rofi"
         copy_dir "$DOTFILES_DIR/.config/eww" "$HOME/.config/eww"
         copy_dir "$DOTFILES_DIR/.config/wal/templates" "$HOME/.config/wal/templates"
         copy_file "$DOTFILES_DIR/.config/dolphinrc" "$HOME/.config/dolphinrc"

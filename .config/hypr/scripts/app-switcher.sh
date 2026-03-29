@@ -9,7 +9,7 @@ choice="$(
     .[] |
     "\(.address)\t\(.class)\t\(.title)\t[ws:\(.workspace.id)]"
   ' |
-  wofi --dmenu --prompt "Switch app"
+  rofi -dmenu -p "Switch app"
 )"
 
 [ -z "$choice" ] && exit 0
