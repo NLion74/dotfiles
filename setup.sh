@@ -141,6 +141,33 @@ ensure_git_repo() {
     git clone "$repo_url" "$dest"
 }
 
+setup_hypr_monitors() {
+    local host template
+    host="$(uname -n)"
+
+    case "$host" in
+        *nlion-pc*|*desktop*)
+            template="$DOTFILES_DIR/.config/hypr/conf/desktop.conf"
+            ;;
+        *laptop-jonte*|*laptop*)
+            template="$DOTFILES_DIR/.config/hypr/conf/laptop.conf"
+            ;;
+        *)
+            warn "No monitor template defined for host: $host"
+            return 0
+            ;;
+    esac
+
+    if [ ! -f "$template" ]; then
+        warn "Missing monitor template: $template"
+        return 0
+    fi
+
+    mkdir -p "$HOME/.config/hypr"
+    install -m 644 "$template" "$HOME/.config/hypr/conf/monitors.conf"
+    log "Installed Hyprland monitor config for $host"
+}
+
 apply_sddm_theme() {
     if ! command_exists sddm; then
         warn "SDDM not installed. Skipping Astronaut theme."
@@ -171,23 +198,19 @@ setup_pywal_sync() {
 parse_args() {
     while [ "$#" -gt 0 ]; do
         case "$1" in
-            --copy-only)
-                COPY_FILES=true
-                ENSURE_PACKAGES=false
-                SET_SHELL=false
-                SETUP_SDDM=false
-                ;;
             --packages-only)
                 COPY_FILES=false
                 ENSURE_PACKAGES=true
                 SET_SHELL=false
                 SETUP_SDDM=false
+                SETUP_MONITORS=false
                 ;;
             --core-only)
                 COPY_FILES=true
                 ENSURE_PACKAGES=true
                 SET_SHELL=false
                 SETUP_SDDM=false
+                SETUP_MONITORS=true
                 ;;
             --skip-shell)
                 SET_SHELL=false
@@ -197,6 +220,9 @@ parse_args() {
                 ;;
             --no-font-cache)
                 REFRESH_FONTS=false
+                ;;
+            --skip-monitors)
+                SETUP_MONITORS=false
                 ;;
             -h|--help)
                 usage
@@ -292,6 +318,12 @@ main() {
         copy_file "$DOTFILES_DIR/.config/dolphinrc" "$HOME/.config/dolphinrc"
         copy_file "$DOTFILES_DIR/.config/autostart/mount.desktop" "$HOME/.config/autostart/mount.desktop"
         copy_dir "$DOTFILES_DIR/.fonts" "$HOME/.fonts"
+
+        if [ "$SETUP_MONITORS" = true ]; then
+            setup_hypr_monitors
+        else
+            log "Skipping Hyprland monitor setup"
+        fi
 
         if [ "$REFRESH_FONTS" = true ] && command_exists fc-cache; then
             log "Refreshing font cache"
