@@ -9,6 +9,7 @@ ENSURE_PACKAGES=true
 SET_SHELL=true
 SETUP_SDDM=true
 REFRESH_FONTS=true
+SETUP_MONITORS=true
 
 usage() {
     cat <<'USAGE'
