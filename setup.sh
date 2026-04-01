@@ -263,6 +263,7 @@ main() {
         zsh
         git
         rsync
+        nautilus
     )
 
     local aur_packages=(
@@ -294,7 +295,6 @@ main() {
         backup "$HOME/.zshrc"
         backup "$HOME/.zsh_aliases"
         backup "$HOME/.config/starship.toml"
-        backup "$HOME/.local/share/fonts"
         backup "$HOME/.config/alacritty"
         backup "$HOME/.config/neofetch"
         backup "$HOME/.config/hypr"
@@ -302,7 +302,6 @@ main() {
         backup "$HOME/.config/rofi"
         backup "$HOME/.config/eww"
         backup "$HOME/.config/autostart/mount.desktop"
-        backup "$HOME/.config/dolphinrc"
         backup "$HOME/scripts"
         backup "$HOME/.fonts"
 
@@ -319,7 +318,6 @@ main() {
         copy_dir "$DOTFILES_DIR/.config/rofi" "$HOME/.config/rofi"
         copy_dir "$DOTFILES_DIR/.config/eww" "$HOME/.config/eww"
         copy_dir "$DOTFILES_DIR/.config/wal/templates" "$HOME/.config/wal/templates"
-        copy_file "$DOTFILES_DIR/.config/dolphinrc" "$HOME/.config/dolphinrc"
         copy_file "$DOTFILES_DIR/.config/autostart/mount.desktop" "$HOME/.config/autostart/mount.desktop"
         copy_dir "$DOTFILES_DIR/.fonts" "$HOME/.fonts"
 

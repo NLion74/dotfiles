@@ -99,6 +99,40 @@ pick_wallpaper_rofi() {
       '
 }
 
+ensure_gtk4_pywal_sync() {
+  mkdir -p "$HOME/.config/gtk-4.0"
+
+  [[ -f "$HOME/.cache/wal/gtk4-colors.css" ]] || {
+    warn "pywal missing GTK4 output: $HOME/.cache/wal/gtk4-colors.css"
+    return 1
+  }
+
+  ln -sf "$HOME/.cache/wal/gtk4-colors.css" "$HOME/.config/gtk-4.0/colors.css"
+
+  cat >"$HOME/.config/gtk-4.0/gtk.css" <<'EOF'
+@import url("colors.css");
+EOF
+}
+
+set_libadwaita_dark() {
+  command -v gsettings >/dev/null 2>&1 || {
+    warn "gsettings not installed; skipping"
+    return 0
+  }
+
+  gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+}
+
+reload_nautilus() {
+  command -v nautilus >/dev/null 2>&1 || {
+    warn "nautilus not installed; skipping"
+    return 0
+  }
+
+  nautilus -q 2>/dev/null || true
+  return 0
+}
+
 main() {
   local wall=""
 
@@ -120,10 +154,14 @@ main() {
     "$HOME/.config/waybar" \
     "$HOME/.config/eww" \
     "$HOME/.config/starship"
+    "$HOME/.config/gtk-4.0"
 
   if [[ -n "${wall:-}" && -f "$wall" ]]; then
     run_step "hyprpaper wallpaper" hyprctl hyprpaper wallpaper ",$wall"
     run_step "wal apply" wal -i "$wall" -q
+	run_step "sync GTK4 pywal colors" ensure_gtk4_pywal_sync
+	run_step "set libadwaita dark mode" set_libadwaita_dark
+	run_step "reload nautilus" reload_nautilus
   else
     fail "wallpaper file missing: ${wall:-<empty>}"
   fi
