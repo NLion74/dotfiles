@@ -187,6 +187,7 @@ setup_pywal_sync() {
     fi
 
     wal -i "$HOME/Pictures/wallpaper.jpg"
+    spicetify backup apply
 
     spicetify config current_theme Dribbblish
     spicetify config color_scheme Dribbblish
