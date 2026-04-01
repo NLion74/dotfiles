@@ -1,40 +1,50 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -uo pipefail
 
-get_spotify_state() {
-  TRACK_ID=$(dbus-send --print-reply \
-    --dest=org.mpris.MediaPlayer2.spotify \
-    /org/mpris/MediaPlayer2 \
-    org.mpris.MediaPlayer2.Player.Metadata \
-    | grep -A 1 "spotify:track" | tail -n1 | awk -F '"' '{print $2}')
+failures=()
 
-  POSITION=$(dbus-send --print-reply \
-    --dest=org.mpris.MediaPlayer2.spotify \
-    /org/mpris/MediaPlayer2 \
-    org.mpris.MediaPlayer2.Player.Position \
-    | grep int64 | awk '{print $2}')
-
-  echo "$TRACK_ID|$POSITION"
+log() {
+  printf '[INFO] %s\n' "$*"
 }
 
-restore_spotify_state() {
-  IFS="|" read -r TRACK_ID POSITION <<< "$1"
+ok() {
+  printf '[ OK ] %s\n' "$*"
+}
 
-  [ -z "$TRACK_ID" ] && return
+warn() {
+  printf '[WARN] %s\n' "$*" >&2
+}
 
-  dbus-send --print-reply \
-    --dest=org.mpris.MediaPlayer2.spotify \
-    /org/mpris/MediaPlayer2 \
-    org.mpris.MediaPlayer2.Player.OpenUri \
-    string:"$TRACK_ID" >/dev/null
+fail() {
+  local msg="$1"
+  failures+=("$msg")
+  printf '[FAIL] %s\n' "$msg" >&2
+}
 
-  sleep 1
+run_step() {
+  local name="$1"
+  shift
 
-  dbus-send --print-reply \
-    --dest=org.mpris.MediaPlayer2.spotify \
-    /org/mpris/MediaPlayer2 \
-    org.mpris.MediaPlayer2.Player.Seek \
-    int64:"$POSITION" >/dev/null
+  if "$@"; then
+    ok "$name"
+  else
+    local code=$?
+    fail "$name (exit $code)"
+  fi
+  return 0
+}
+
+run_shell_step() {
+  local name="$1"
+  local cmd="$2"
+
+  if bash -o pipefail -c "$cmd"; then
+    ok "$name"
+  else
+    local code=$?
+    fail "$name (exit $code)"
+  fi
+  return 0
 }
 
 copy_if_exists() {
@@ -42,31 +52,32 @@ copy_if_exists() {
   local dst="$2"
 
   if [[ -f "$src" ]]; then
-    mkdir -p "$(dirname "$dst")"
     install -Dm644 "$src" "$dst"
   else
-    printf 'pywal missing output: %s\n' "$src" >&2
+    warn "pywal missing output: $src"
+    return 1
   fi
 }
 
 apply_spicetify_pywal() {
-  command -v spicetify >/dev/null 2>&1 || return 0
-  command -v pywal-spicetify >/dev/null 2>&1 || return 0
+  command -v spicetify >/dev/null 2>&1 || {
+    warn "spicetify not installed; skipping"
+    return 0
+  }
 
-  STATE=$(get_spotify_state)
+  command -v pywal-spicetify >/dev/null 2>&1 || {
+    warn "pywal-spicetify not installed; skipping"
+    return 0
+  }
 
-  spicetify config current_theme Dribbblish >/dev/null
-  spicetify config color_scheme pywal >/dev/null
-  spicetify config inject_css 1 >/dev/null
-  spicetify config replace_colors 1 >/dev/null
-  spicetify config inject_theme_js 1 >/dev/null
-  spicetify config overwrite_assets 1 >/dev/null
-
-  pywal-spicetify Dribbblish
-  spicetify apply
-
-  sleep 2
-  restore_spotify_state "$STATE"
+  run_step "spicetify config current_theme" spicetify config current_theme Dribbblish
+  run_step "spicetify config color_scheme" spicetify config color_scheme pywal
+  run_step "spicetify config inject_css" spicetify config inject_css 1
+  run_step "spicetify config replace_colors" spicetify config replace_colors 1
+  run_step "spicetify config inject_theme_js" spicetify config inject_theme_js 1
+  run_step "spicetify config overwrite_assets" spicetify config overwrite_assets 1
+  run_step "pywal-spicetify Dribbblish" pywal-spicetify Dribbblish
+  run_step "spicetify apply" spicetify apply
 }
 
 pick_wallpaper_rofi() {
@@ -88,38 +99,69 @@ pick_wallpaper_rofi() {
       '
 }
 
-if [ $# -gt 0 ]; then
-  wall="$1"
-else
-  wall="$(pick_wallpaper_rofi || true)"
-  [ -z "${wall:-}" ] && exit 1
-fi
+main() {
+  local wall=""
 
-[ -z "${wall:-}" ] && exit 1
+  if [[ $# -gt 0 ]]; then
+    wall="$1"
+  else
+    wall="$(pick_wallpaper_rofi)" || {
+      fail "wallpaper selection failed"
+      wall=""
+    }
+  fi
 
-mkdir -p \
-  "$HOME/.config/alacritty" \
-  "$HOME/.config/waybar" \
-  "$HOME/.config/eww" \
-  "$HOME/.config/starship"
+  if [[ -z "${wall:-}" ]]; then
+    fail "no wallpaper selected"
+  fi
 
-if [[ -f "$wall" ]]; then
-  hyprctl hyprpaper preload "$wall" || true
-  hyprctl hyprpaper wallpaper ",$wall" || true
-fi
+  run_step "create config directories" mkdir -p \
+    "$HOME/.config/alacritty" \
+    "$HOME/.config/waybar" \
+    "$HOME/.config/eww" \
+    "$HOME/.config/starship"
 
-wal -i "$wall" -q
+  if [[ -n "${wall:-}" && -f "$wall" ]]; then
+    run_step "hyprpaper wallpaper" hyprctl hyprpaper wallpaper ",$wall"
+    run_step "wal apply" wal -i "$wall" -q
+  else
+    fail "wallpaper file missing: ${wall:-<empty>}"
+  fi
 
-apply_spicetify_pywal
-pywalfox update || true
+  apply_spicetify_pywal
+  run_step "pywalfox update" pywalfox update
 
-copy_if_exists "$HOME/.cache/wal/alacritty.toml" "$HOME/.config/alacritty/colors.toml"
-copy_if_exists "$HOME/.cache/wal/waybar.css"     "$HOME/.config/waybar/style.css"
-copy_if_exists "$HOME/.cache/wal/eww.scss"       "$HOME/.config/eww/eww.scss"
-copy_if_exists "$HOME/.cache/wal/starship.toml"  "$HOME/.config/starship.toml"
+  run_step "copy alacritty colors" copy_if_exists \
+    "$HOME/.cache/wal/alacritty.toml" \
+    "$HOME/.config/alacritty/colors.toml"
 
-pkill waybar || true
-waybar >/dev/null 2>&1 & disown
+  run_step "copy waybar css" copy_if_exists \
+    "$HOME/.cache/wal/waybar.css" \
+    "$HOME/.config/waybar/style.css"
 
-eww reload || true
-hyprctl reload || true
+  run_step "copy eww scss" copy_if_exists \
+    "$HOME/.cache/wal/eww.scss" \
+    "$HOME/.config/eww/eww.scss"
+
+  run_step "copy starship config" copy_if_exists \
+    "$HOME/.cache/wal/starship.toml" \
+    "$HOME/.config/starship.toml"
+
+  run_step "pkill waybar" pkill waybar
+  run_shell_step "start waybar" 'waybar >/dev/null 2>&1 & disown'
+
+  run_step "eww reload" eww reload
+  run_step "hyprctl reload" hyprctl reload
+
+  printf '\n'
+  if ((${#failures[@]})); then
+    printf 'Failed steps:\n' >&2
+    printf ' - %s\n' "${failures[@]}" >&2
+    return 1
+  else
+    printf 'All steps completed successfully.\n'
+    return 0
+  fi
+}
+
+main "$@"
