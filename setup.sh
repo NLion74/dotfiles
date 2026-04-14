@@ -9,6 +9,7 @@ ENSURE_PACKAGES=true
 SET_SHELL=true
 SETUP_SDDM=true
 REFRESH_FONTS=true
+RUN_APPLY_THEME=true
 
 usage() {
     cat <<'USAGE'
@@ -20,6 +21,7 @@ Options:
   --core-only                 Ensure packages and copy dotfiles, skip shell + SDDM.
   --skip-shell                Do not change login shell to zsh.
   --skip-sddm                 Do not install/apply SDDM Astronaut Theme.
+  --skip-apply-theme          Do not run apply-theme.sh after setup.
   --no-font-cache             Do not run fc-cache after copying fonts.
   -h, --help                  Show this help message.
 USAGE
@@ -151,24 +153,27 @@ apply_sddm_theme() {
     bash -c "$(curl -fsSL https://raw.githubusercontent.com/keyitdev/sddm-astronaut-theme/master/setup.sh)"
 }
 
-setup_pywal_sync() {
-    log "Setting up pywal sync"
+run_apply_theme_once() {
+    local apply_script="$HOME/.config/hypr/scripts/apply-theme.sh"
 
-    if ! command_exists wal; then
-        ensure_official_pkg "python-pywal"
+    [[ "$RUN_APPLY_THEME" == true ]] || return 0
+
+    if [[ ! -f "$apply_script" ]]; then
+        warn "apply-theme.sh not found at $apply_script; skipping"
+        return 0
     fi
 
-    wal -i "$HOME/Pictures/wallpaper.jpg"
-    spicetify backup apply
+    chmod +x "$apply_script"
 
-    spicetify backup apply
+    if [[ -z "${WAYLAND_DISPLAY:-}" ]]; then
+        warn "No active Wayland session; skipping apply-theme"
+        return 0
+    fi
 
-    spicetify config current_theme Dribbblish
-    spicetify config color_scheme Dribbblish
-    spicetify config inject_css 1
-    spicetify config replace_colors 1
-    spicetify config inject_theme_js 1
-    pywal-spicetify Dribbblish
+    log "Running apply-theme.sh"
+    "$apply_script" --current 2>/dev/null \
+        || "$apply_script" \
+        || warn "apply-theme.sh failed; continuing"
 }
 
 parse_args() {
@@ -191,6 +196,9 @@ parse_args() {
                 ;;
             --skip-sddm)
                 SETUP_SDDM=false
+                ;;
+            --skip-apply-theme)
+                RUN_APPLY_THEME=false
                 ;;
             --no-font-cache)
                 REFRESH_FONTS=false
@@ -255,7 +263,6 @@ main() {
         done
 
         ensure_git_repo "https://github.com/zdharma-continuum/zinit.git" "$HOME/.zsh/zinit"
-        ensure_git_repo "https://github.com/spicetify/spicetify-themes.git" "$HOME/.config/spicetify/Themes"
     else
         log "Skipping package installation"
     fi
@@ -293,6 +300,7 @@ main() {
         copy_file "$DOTFILES_DIR/.config/autostart/mount.desktop" "$HOME/.config/autostart/mount.desktop"
         copy_dir "$DOTFILES_DIR/.local/share/fonts" "$HOME/.local/share/fonts"
         copy_dir "$DOTFILES_DIR/.config/fontconfig" "$HOME/.config/fontconfig"
+        copy_dir "$DOTFILES_DIR/.config/spicetify/Themes" "$HOME/.config/spicetify/Themes"
 
         if [ "$REFRESH_FONTS" = true ] && command_exists fc-cache; then
             log "Refreshing font cache"
@@ -318,6 +326,8 @@ main() {
     else
         log "Skipping SDDM theme setup"
     fi
+
+    run_apply_theme_once
 
     log "Dotfiles setup complete"
 }
