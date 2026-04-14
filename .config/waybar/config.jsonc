@@ -25,7 +25,7 @@
     },
 
     "custom/mediawindow": {
-        "exec": "/home/nlion/.config/waybar/scripts/mediawindow.sh",
+        "exec": "~/.config/waybar/scripts/mediawindow.sh",
         "return-type": "json",
         "interval": 0.5,
         "max-length": 48,
@@ -38,7 +38,7 @@
         "format-icons": {
             "default": ["", "", ""],
         },
-        "on-click": "/home/nlion/.config/eww/scripts/open-audio.sh",
+        "on-click": "~/.config/eww/scripts/open-audio.sh",
         "on-click-middle": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
     },
 
@@ -63,6 +63,6 @@
     "custom/power": {
         "format": "",
         "tooltip": false,
-        "on-click": "/home/nlion/.config/waybar/scripts/powermenu.sh",
+        "on-click": "~/.config/waybar/scripts/powermenu.sh",
     },
 }

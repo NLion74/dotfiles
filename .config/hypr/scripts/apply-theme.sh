@@ -60,24 +60,28 @@ copy_if_exists() {
 }
 
 apply_spicetify_pywal() {
+  local theme="Sleek"
+  local src="$HOME/.cache/wal/spicetify.ini"
+  local dst="${XDG_CONFIG_HOME:-$HOME/.config}/spicetify/Themes/${theme}/color.ini"
+
   command -v spicetify >/dev/null 2>&1 || {
     warn "spicetify not installed; skipping"
     return 0
   }
 
-  command -v pywal-spicetify >/dev/null 2>&1 || {
-    warn "pywal-spicetify not installed; skipping"
-    return 0
+  [[ -f "$src" ]] || {
+    warn "pywal missing spicetify output: $src"
+    return 1
   }
 
-  run_step "spicetify config current_theme" spicetify config current_theme Dribbblish
+  run_step "copy spicetify pywal color.ini" copy_if_exists "$src" "$dst"
+  run_step "spicetify config current_theme" spicetify config current_theme "$theme"
   run_step "spicetify config color_scheme" spicetify config color_scheme pywal
   run_step "spicetify config inject_css" spicetify config inject_css 1
   run_step "spicetify config replace_colors" spicetify config replace_colors 1
   run_step "spicetify config inject_theme_js" spicetify config inject_theme_js 1
   run_step "spicetify config overwrite_assets" spicetify config overwrite_assets 1
-  run_step "pywal-spicetify Dribbblish" pywal-spicetify Dribbblish
-  run_step "spicetify apply" spicetify apply
+  run_step "spicetify apply --no-restart" spicetify apply --no-restart
 }
 
 pick_wallpaper_rofi() {

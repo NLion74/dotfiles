@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-WALL="/home/nlion/sddm-astronaut-theme/Backgrounds/pixel_sakura_static.png"
+WALL="~/sddm-astronaut-theme/Backgrounds/pixel_sakura_static.png"
 
 pkill hyprpaper 2>/dev/null
 hyprpaper &
