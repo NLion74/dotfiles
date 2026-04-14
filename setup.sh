@@ -9,7 +9,6 @@ ENSURE_PACKAGES=true
 SET_SHELL=true
 SETUP_SDDM=true
 REFRESH_FONTS=true
-SETUP_MONITORS=true
 
 usage() {
     cat <<'USAGE'
@@ -142,33 +141,6 @@ ensure_git_repo() {
     git clone "$repo_url" "$dest"
 }
 
-setup_hypr_monitors() {
-    local host template
-    host="$(uname -n)"
-
-    case "$host" in
-        *nlion-pc*|*desktop*)
-            template="$DOTFILES_DIR/.config/hypr/conf/desktop.conf"
-            ;;
-        *laptop-jonte*|*laptop*)
-            template="$DOTFILES_DIR/.config/hypr/conf/laptop.conf"
-            ;;
-        *)
-            warn "No monitor template defined for host: $host"
-            return 0
-            ;;
-    esac
-
-    if [ ! -f "$template" ]; then
-        warn "Missing monitor template: $template"
-        return 0
-    fi
-
-    mkdir -p "$HOME/.config/hypr"
-    install -m 644 "$template" "$HOME/.config/hypr/conf/monitors.conf"
-    log "Installed Hyprland monitor config for $host"
-}
-
 apply_sddm_theme() {
     if ! command_exists sddm; then
         warn "SDDM not installed. Skipping Astronaut theme."
@@ -207,14 +179,12 @@ parse_args() {
                 ENSURE_PACKAGES=true
                 SET_SHELL=false
                 SETUP_SDDM=false
-                SETUP_MONITORS=false
                 ;;
             --core-only)
                 COPY_FILES=true
                 ENSURE_PACKAGES=true
                 SET_SHELL=false
                 SETUP_SDDM=false
-                SETUP_MONITORS=true
                 ;;
             --skip-shell)
                 SET_SHELL=false
@@ -224,9 +194,6 @@ parse_args() {
                 ;;
             --no-font-cache)
                 REFRESH_FONTS=false
-                ;;
-            --skip-monitors)
-                SETUP_MONITORS=false
                 ;;
             -h|--help)
                 usage
@@ -264,6 +231,9 @@ main() {
         git
         rsync
         nautilus
+        rofimoji
+        polkit-gnome
+        wtype
     )
 
     local aur_packages=(
@@ -303,7 +273,9 @@ main() {
         backup "$HOME/.config/eww"
         backup "$HOME/.config/autostart/mount.desktop"
         backup "$HOME/scripts"
-        backup "$HOME/.fonts"
+        backup "$HOME/.local/share/fonts"
+        backup "$HOME/.config/fontconfig"
+        backup "$HOME/.config/wal/templates"
 
         log "Copying dotfiles"
         mkdir -p "$HOME/.config" "$HOME/.local/share" "$HOME/.config/autostart" "$HOME/.config/wal/templates"
@@ -319,13 +291,8 @@ main() {
         copy_dir "$DOTFILES_DIR/.config/eww" "$HOME/.config/eww"
         copy_dir "$DOTFILES_DIR/.config/wal/templates" "$HOME/.config/wal/templates"
         copy_file "$DOTFILES_DIR/.config/autostart/mount.desktop" "$HOME/.config/autostart/mount.desktop"
-        copy_dir "$DOTFILES_DIR/.fonts" "$HOME/.fonts"
-
-        if [ "$SETUP_MONITORS" = true ]; then
-            setup_hypr_monitors
-        else
-            log "Skipping Hyprland monitor setup"
-        fi
+        copy_dir "$DOTFILES_DIR/.local/share/fonts" "$HOME/.local/share/fonts"
+        copy_dir "$DOTFILES_DIR/.config/fontconfig" "$HOME/.config/fontconfig"
 
         if [ "$REFRESH_FONTS" = true ] && command_exists fc-cache; then
             log "Refreshing font cache"

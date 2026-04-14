@@ -7,7 +7,7 @@ size = 12
 builtin_box_drawing = true
 
 [general]
-import = ["~/.config/alacritty/colors.toml"]
+import = ["~/.cache/wal/alacritty.toml"]
 
 [window]
 opacity = 0.85
