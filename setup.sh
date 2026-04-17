@@ -242,6 +242,7 @@ main() {
         rofimoji
         polkit-gnome
         wtype
+        brightnessctl
     )
 
     local aur_packages=(
