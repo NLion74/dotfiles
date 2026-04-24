@@ -92,10 +92,12 @@ pick_wallpaper_rofi() {
 }
 
 # ── Theme application steps ───────────────────────────────────────────────────
-
 apply_wallpaper() {
   local wall="$1"
-  run_step "hyprpaper wallpaper" hyprctl hyprpaper wallpaper ",$wall"
+
+  hyprctl hyprpaper preload "$wall"
+  hyprctl hyprpaper wallpaper ",$wall"
+  hyprctl hyprpaper unload unused
 }
 
 apply_wal() {
