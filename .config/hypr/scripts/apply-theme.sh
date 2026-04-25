@@ -95,9 +95,9 @@ pick_wallpaper_rofi() {
 apply_wallpaper() {
   local wall="$1"
 
+  hyprctl hyprpaper unload all 2>/dev/null || true
   hyprctl hyprpaper preload "$wall"
   hyprctl hyprpaper wallpaper ",$wall"
-  hyprctl hyprpaper unload unused
 }
 
 apply_wal() {
@@ -226,7 +226,6 @@ main() {
   copy_pywal_outputs
   restart_waybar
   reload_eww
-  run_step "hyprctl reload" hyprctl reload
 
   printf '\n'
   if ((${#failures[@]})); then
