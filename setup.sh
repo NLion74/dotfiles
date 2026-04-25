@@ -272,7 +272,6 @@ main() {
         log "Backing up existing dotfiles"
         backup "$HOME/.zshrc"
         backup "$HOME/.zsh_aliases"
-        backup "$HOME/.config/starship.toml"
         backup "$HOME/.config/alacritty"
         backup "$HOME/.config/neofetch"
         backup "$HOME/.config/hypr"
@@ -284,6 +283,7 @@ main() {
         backup "$HOME/.local/share/fonts"
         backup "$HOME/.config/fontconfig"
         backup "$HOME/.config/wal/templates"
+        backup "$HOME/.config/nvim"
 
         log "Copying dotfiles"
         mkdir -p "$HOME/.config" "$HOME/.local/share" "$HOME/.config/autostart" "$HOME/.config/wal/templates"
@@ -302,6 +302,7 @@ main() {
         copy_dir "$DOTFILES_DIR/.local/share/fonts" "$HOME/.local/share/fonts"
         copy_dir "$DOTFILES_DIR/.config/fontconfig" "$HOME/.config/fontconfig"
         copy_dir "$DOTFILES_DIR/.config/spicetify/Themes" "$HOME/.config/spicetify/Themes"
+        copy_dir "$DOTFILES_DIR/.config/nvim" "$HOME/.config/nvim"
 
         if [ "$REFRESH_FONTS" = true ] && command_exists fc-cache; then
             log "Refreshing font cache"
