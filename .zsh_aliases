@@ -18,6 +18,8 @@ alias grep='grep --color=auto'
 # File Manipulation
 alias n='nano'
 
+alias zi='zoxide query -i | xargs cd'
+
 # Confirmation
 alias mv='mv -i'
 alias cp='cp -i'

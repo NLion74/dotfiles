@@ -243,6 +243,8 @@ main() {
         polkit-gnome
         wtype
         brightnessctl
+        fzf
+        zoxide
     )
 
     local aur_packages=(
