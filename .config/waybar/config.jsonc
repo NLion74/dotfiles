@@ -6,7 +6,14 @@
 
     "modules-left": ["hyprland/workspaces", "wlr/taskbar"],
     "modules-center": ["custom/mediawindow"],
-    "modules-right": ["pulseaudio", "network", "clock", "tray", "custom/power"],
+    "modules-right": [
+        "pulseaudio",
+        "network",
+        "battery",
+        "clock",
+        "custom/battery",
+        "custom/power",
+    ],
 
     "wlr/taskbar": {
         "format": "{icon}",
@@ -48,6 +55,12 @@
         "format-disconnected": "󰖪",
         "tooltip": true,
         "on-click": "nm-connection-editor",
+    },
+
+    "custom/battery": {
+        "exec": "~/.config/waybar/scripts/battery.sh",
+        "return-type": "json",
+        "interval": 10,
     },
 
     "clock": {
