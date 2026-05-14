@@ -245,6 +245,8 @@ main() {
         brightnessctl
         fzf
         zoxide
+        sddm
+        sddm-dinit
     )
 
     local aur_packages=(
