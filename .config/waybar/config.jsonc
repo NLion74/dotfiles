@@ -1,5 +1,6 @@
 {
     "layer": "top",
+    "reload_style_on_change": true,
     "position": "top",
     "height": 46,
     "spacing": 8,
@@ -12,7 +13,7 @@
         "battery",
         "clock",
         "custom/battery",
-        "custom/power",
+        "custom/power"
     ],
 
     "wlr/taskbar": {
@@ -22,13 +23,13 @@
         "all-outputs": false,
         "active-first": true,
         "on-click": "activate",
-        "on-click-middle": "close",
+        "on-click-middle": "close"
     },
 
     "hyprland/workspaces": {
         "disable-scroll": false,
         "all-outputs": false,
-        "format": "{name}",
+        "format": "{name}"
     },
 
     "custom/mediawindow": {
@@ -36,17 +37,17 @@
         "return-type": "json",
         "interval": 0.5,
         "max-length": 48,
-        "tooltip": true,
+        "tooltip": true
     },
 
     "pulseaudio": {
         "format": "{icon} {volume}%",
         "format-muted": "󰖁 mute",
         "format-icons": {
-            "default": ["", "", ""],
+            "default": ["", "", ""]
         },
         "on-click": "~/.config/eww/scripts/open-audio.sh",
-        "on-click-middle": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+        "on-click-middle": "pactl set-sink-mute @DEFAULT_SINK@ toggle"
     },
 
     "network": {
@@ -54,28 +55,28 @@
         "format-ethernet": "󰈀",
         "format-disconnected": "󰖪",
         "tooltip": true,
-        "on-click": "connex",
+        "on-click": "connex"
     },
 
     "custom/battery": {
         "exec": "~/.config/waybar/scripts/battery.sh",
         "return-type": "json",
-        "interval": 10,
+        "interval": 10
     },
 
     "clock": {
         "format": "{:%H:%M}",
         "format-alt": "{:%d.%m.%Y}",
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
     },
 
     "tray": {
-        "spacing": 8,
+        "spacing": 8
     },
 
     "custom/power": {
         "format": "",
         "tooltip": false,
-        "on-click": "~/.config/waybar/scripts/powermenu.sh",
-    },
+        "on-click": "~/.config/waybar/scripts/powermenu.sh"
+    }
 }

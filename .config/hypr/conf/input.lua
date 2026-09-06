@@ -1,0 +1,15 @@
+hl.config({
+  input = {
+    kb_layout = "de",
+    follow_mouse = 2,
+    mouse_refocus = false,
+  },
+
+  misc = {
+    mouse_move_focuses_monitor = false,
+  },
+
+  binds = {
+    allow_workspace_cycles = true,
+  },
+})

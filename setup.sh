@@ -224,7 +224,6 @@ main() {
         hyprland
         hyprpaper
         hyprsunset
-        waybar
         rofi
         dolphin
         jq
@@ -254,6 +253,7 @@ main() {
         spicetify-cli-git
         pywal-spicetify
         eww
+        waybar-git
     )
 
     if [ "$ENSURE_PACKAGES" = true ]; then
